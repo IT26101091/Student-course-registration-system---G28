@@ -1,1 +1,6 @@
-[ ]
+[ {
+  "name" : "binara",
+  "email" : "it26101091@my.sliit.lk",
+  "studentId" : "STU001",
+  "degreeProgram" : "DSA"
+} ]
