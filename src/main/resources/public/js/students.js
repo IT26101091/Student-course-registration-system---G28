@@ -292,4 +292,21 @@
   });
 
   loadStudents();
+
+  // Refresh the admin list quietly so student profiles created from the
+  // Student Portal appear here without requiring a manual page refresh.
+  async function refreshStudentsQuietly() {
+    try {
+      const data = await request(API_URL);
+      if (Array.isArray(data)) {
+        students = data;
+        render();
+      }
+    } catch {
+      // Keep the last successful view during a temporary connection issue.
+    }
+  }
+
+  window.setInterval(refreshStudentsQuietly, 10000);
+  window.addEventListener("focus", refreshStudentsQuietly);
 })();
