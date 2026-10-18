@@ -1,6 +1,8 @@
 
 package com.coursehub.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Admin extends Person {
 
     private String adminId;
@@ -25,6 +27,7 @@ public class Admin extends Person {
     }
 
     @Override
+    @JsonIgnore
     public String getRole() {
         return role;
     }

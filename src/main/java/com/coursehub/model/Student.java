@@ -1,6 +1,8 @@
 
 package com.coursehub.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Student extends Person {
 
     private String studentId;
@@ -34,6 +36,7 @@ public class Student extends Person {
     }
 
     @Override
+    @JsonIgnore
     public String getRole() {
         return "STUDENT";
     }
