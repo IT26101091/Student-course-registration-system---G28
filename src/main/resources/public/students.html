@@ -174,6 +174,54 @@
     </form>
   </dialog>
 
+  <dialog class="student-dialog" id="account-dialog">
+    <form id="account-form" novalidate>
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">STUDENT ACCOUNT</p>
+          <h2>Create login account</h2>
+          <p>The Student ID will be the initial username.</p>
+        </div>
+
+        <button class="icon-button" id="close-account-dialog"
+                type="button" aria-label="Close dialog">×</button>
+      </div>
+
+      <div class="form-grid">
+        <label class="form-field" for="account-student-id">
+          <span>Student ID</span>
+          <input id="account-student-id" readonly required>
+        </label>
+
+        <label class="form-field full-width"
+               for="temporary-password">
+          <span>Temporary password</span>
+          <input id="temporary-password"
+                 type="password"
+                 minlength="8"
+                 autocomplete="new-password"
+                 required>
+          <small>The student must change this password at first login.</small>
+        </label>
+      </div>
+
+      <p class="form-error" id="account-form-error"
+         role="alert" hidden></p>
+
+      <div class="dialog-actions">
+        <button class="button button-subtle"
+                id="cancel-account-dialog" type="button">
+          Cancel
+        </button>
+
+        <button class="button button-primary"
+                id="create-account-button" type="submit">
+          Create account
+        </button>
+      </div>
+    </form>
+  </dialog>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="/js/students.js" defer></script>
 </body>

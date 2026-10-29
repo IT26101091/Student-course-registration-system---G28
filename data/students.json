@@ -3,4 +3,9 @@
   "email" : "it26101091@my.sliit.lk",
   "studentId" : "STU001",
   "degreeProgram" : "DSA"
+}, {
+  "name" : "AMAL PERERA",
+  "email" : "binara0928@gmail.com",
+  "studentId" : "STU002",
+  "degreeProgram" : "DSA"
 } ]

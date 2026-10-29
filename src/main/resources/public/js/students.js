@@ -138,6 +138,7 @@
           <td class="action-cell">
             <span class="table-actions">
               <button class="action-button" type="button" data-action="edit" data-id="${id}" aria-label="Edit ${name}" title="Edit student">✎</button>
+              <button class="action-button" type="button"data-action="create-account" data-id="${id}"aria-label="Create login account for ${name}"title="Create login account">🔑</button>
               <button class="action-button delete" type="button" data-action="delete" data-id="${id}" aria-label="Delete ${name}" title="Delete student">⌫</button>
             </span>
           </td>
@@ -264,6 +265,66 @@
     }
   }
 
+  const accountDialog = document.getElementById("account-dialog");
+  const accountForm = document.getElementById("account-form");
+  const accountStudentId = document.getElementById("account-student-id");
+  const temporaryPassword = document.getElementById("temporary-password");
+  const accountFormError = document.getElementById("account-form-error");
+  const createAccountButton = document.getElementById("create-account-button");
+
+  function openAccountDialog(student) {
+    accountForm.reset();
+    accountStudentId.value = student.studentId;
+    accountFormError.hidden = true;
+    accountFormError.textContent = "";
+    accountDialog.showModal();
+    temporaryPassword.focus();
+  }
+
+  accountForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    accountFormError.hidden = true;
+
+    if (!accountForm.reportValidity()) {
+      return;
+    }
+
+    createAccountButton.disabled = true;
+    createAccountButton.textContent = "Creating...";
+
+    try {
+      const result = await request("/api/admin/accounts", {
+        method: "POST",
+        body: JSON.stringify({
+          studentId: accountStudentId.value,
+          temporaryPassword: temporaryPassword.value
+        })
+      });
+
+      accountDialog.close();
+      accountForm.reset();
+
+      showToast(
+          `Login created. Username: ${result.username}. Share the temporary password securely.`
+      );
+
+    } catch (error) {
+      accountFormError.textContent = error.message;
+      accountFormError.hidden = false;
+
+    } finally {
+      createAccountButton.disabled = false;
+      createAccountButton.textContent = "Create account";
+    }
+  });
+
+  document.getElementById("close-account-dialog")
+      .addEventListener("click", () => accountDialog.close());
+
+  document.getElementById("cancel-account-dialog")
+      .addEventListener("click", () => accountDialog.close());
+
   document.getElementById("add-student-button").addEventListener("click", () => openDialog());
   document.getElementById("close-dialog-button").addEventListener("click", closeDialog);
   document.getElementById("cancel-dialog-button").addEventListener("click", closeDialog);
@@ -274,10 +335,25 @@
   elements.tableBody.addEventListener("click", event => {
     const button = event.target.closest("button[data-action]");
     if (!button) return;
+
     const id = button.dataset.id;
+
     if (button.dataset.action === "edit") {
-      const student = students.find(item => String(item.studentId) === String(id));
+      const student = students.find(
+          item => String(item.studentId) === String(id)
+      );
+
       if (student) openDialog(student);
+
+    } else if (button.dataset.action === "create-account") {
+      const student = students.find(
+          item => String(item.studentId) === String(id)
+      );
+
+      if (student) {
+        openAccountDialog(student);
+      }
+
     } else if (button.dataset.action === "delete") {
       deleteStudent(id);
     }
