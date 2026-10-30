@@ -4,6 +4,9 @@ package com.coursehub;
 import com.coursehub.repository.StudentRepository;
 import com.coursehub.routes.StudentRoutes;
 import com.coursehub.service.StudentService;
+import com.coursehub.repository.CourseRepository;
+import com.coursehub.service.CourseService;
+import com.coursehub.routes.CourseRoutes;
 import com.coursehub.repository.AccountRepository;
 import com.coursehub.routes.AuthRoutes;
 import com.coursehub.service.AccountService;
@@ -28,6 +31,16 @@ public class Main {
 
         StudentRoutes studentRoutes =
                 new StudentRoutes(studentService);
+
+        // Course management
+        CourseRepository courseRepository =
+                new CourseRepository();
+
+        CourseService courseService =
+                new CourseService();
+
+        CourseRoutes courseRoutes =
+                new CourseRoutes(courseService);
 
 
         AccountRepository accountRepository =
@@ -179,6 +192,27 @@ public class Main {
                     "/api/admin/accounts",
                     adminAccountRoutes::createStudentAccount
             );
+            // Course CRUD API.
+            config.routes.get(
+                    "/api/courses",
+                    courseRoutes::getAll);
+
+            config.routes.get(
+                    "/api/courses/{courseCode}",
+                    courseRoutes::getOne);
+
+            config.routes.post(
+                    "/api/courses",
+                    courseRoutes::create);
+
+            config.routes.put(
+                    "/api/courses/{courseCode}",
+                    courseRoutes::update);
+
+            config.routes.delete(
+                    "/api/courses/{courseCode}",
+                    courseRoutes::delete);
+
 
         }).start(7070);
 
