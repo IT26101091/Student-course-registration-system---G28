@@ -1,6 +1,7 @@
 package com.coursehub.service;
 
-    public class StudentQueueTest {
+    public class
+    StudentQueueTest {
 
         public static void main(String[] args) {
 

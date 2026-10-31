@@ -1,4 +1,3 @@
-
 package com.coursehub.service;
 
 import com.coursehub.model.QueueEntry;
@@ -12,7 +11,23 @@ public class CourseWaitingListService {
         return repository.add(courseCode, studentId);
     }
 
-    public String getNextStudent(String courseCode) {
+
+    public String peekNextStudent(String courseCode) {
+        if (courseCode == null || courseCode.isBlank()) {
+            return null;
+        }
+
+        QueueEntry entry = repository.peekFirst(courseCode);
+
+        if (entry == null) {
+            return null;
+        }
+
+        return entry.getStudentId();
+    }
+
+
+    public String removeNextStudent(String courseCode) {
         if (courseCode == null || courseCode.isBlank()) {
             return null;
         }
@@ -24,6 +39,11 @@ public class CourseWaitingListService {
         }
 
         return entry.getStudentId();
+    }
+
+
+    public String getNextStudent(String courseCode) {
+        return removeNextStudent(courseCode);
     }
 
     public int getWaitingCount(String courseCode) {

@@ -28,7 +28,7 @@ public class QueueRepository {
 
         List<QueueEntry> result = new ArrayList<>();
 
-        if (courseCode == null) {
+        if (courseCode == null || courseCode.isBlank()) {
             return result;
         }
 
@@ -71,7 +71,25 @@ public class QueueRepository {
         return true;
     }
 
+
+    public synchronized QueueEntry peekFirst(String courseCode) {
+
+        if (courseCode == null || courseCode.isBlank()) {
+            return null;
+        }
+
+        for (QueueEntry entry : store.readAll()) {
+            if (courseCode.equals(entry.getCourseCode())) {
+                return entry;
+            }
+        }
+
+        return null;
+    }
+
+
     public synchronized QueueEntry removeFirst(String courseCode) {
+
         if (courseCode == null || courseCode.isBlank()) {
             return null;
         }
