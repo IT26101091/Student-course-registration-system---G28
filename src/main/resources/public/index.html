@@ -1,42 +1,190 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CourseHub | Student Course Registration</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="/" aria-label="CourseHub home"><span class="brand-mark">C</span> CourseHub</a>
-    <span class="topbar-label">University course registration</span>
-  </header>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CourseHub | Sign In</title>
 
-  <main class="hero-wrap">
-    <section class="hero">
-      <p class="eyebrow">STUDENT COURSE REGISTRATION SYSTEM</p>
-      <h1>Your next semester<br><span>starts here.</span></h1>
-      <p class="intro">Explore courses, manage registrations, and keep track of your academic journey in one place.</p>
-      <div class="portal-grid">
-        <article class="portal-card">
-          <div class="card-icon student-icon" aria-hidden="true">↗</div>
-          <h2>Student portal</h2>
-          <p>Browse courses and manage your registrations.</p>
-          <button class="portal-button" type="button" disabled title="Portal will be connected when CRUD modules are implemented">Student portal <span>→</span></button>
-          <small>Module under development</small>
-        </article>
-        <article class="portal-card">
-          <div class="card-icon admin-icon" aria-hidden="true">▤</div>
-          <h2>Admin portal</h2>
-          <p>Manage course records, students, and waiting lists.</p>
-          <button class="portal-button secondary" type="button" disabled title="Portal will be connected when CRUD modules are implemented">Admin portal <span>→</span></button>
-          <small>Module under development</small>
-        </article>
-      </div>
-      <div class="server-status"><span id="status-dot" class="status-dot"></span><span id="server-status">Checking connection to Java server…</span></div>
-    </section>
-    <footer>CourseHub · Java OOP Group Project</footer>
-  </main>
-  <script src="/js/app.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #f1f5fb;
+      color: #172b4d;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 440px;
+      padding: 36px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 12px 40px rgba(30, 50, 80, 0.10);
+    }
+
+    .brand {
+      color: #245ce6;
+      font-size: 25px;
+      font-weight: bold;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: 27px;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 2px solid #b8cbff;
+      border-color: #245ce6;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 22px;
+      border: none;
+      border-radius: 8px;
+      background: #245ce6;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .message {
+      padding: 12px;
+      margin-top: 18px;
+      border-radius: 8px;
+      background: #fff0f0;
+      color: #a32222;
+      line-height: 1.5;
+    }
+
+    .help {
+      margin-top: 20px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+<main class="card">
+  <div class="brand">CourseHub</div>
+
+  <section id="login-panel">
+    <h1>Welcome back</h1>
+    <p class="description">
+      Sign in to your student or administrator account.
+    </p>
+
+    <form id="login-form">
+      <label for="username">Username or Student ID</label>
+      <input
+              id="username"
+              name="username"
+              autocomplete="username"
+              required>
+
+      <label for="password">Password</label>
+      <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required>
+
+      <button id="login-button" type="submit">
+        Sign in
+      </button>
+    </form>
+
+    <p class="help">
+      New student? Ask your administrator for your login
+      details and temporary password.
+    </p>
+  </section>
+
+  <section id="password-panel" hidden>
+    <h1>Secure your account</h1>
+    <p class="description">
+      You are using a temporary password. Change it before
+      continuing to CourseHub.
+    </p>
+
+    <form id="password-form">
+      <label for="current-password">Current password</label>
+      <input
+              id="current-password"
+              type="password"
+              autocomplete="current-password"
+              required>
+
+      <label for="new-password">New password</label>
+      <input
+              id="new-password"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required>
+
+      <label for="confirm-password">Confirm new password</label>
+      <input
+              id="confirm-password"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required>
+
+      <button id="password-button" type="submit">
+        Change password
+      </button>
+    </form>
+  </section>
+
+  <p id="message" class="message" role="alert" hidden></p>
+</main>
+
+<script src="/js/app.js" defer></script>
 </body>
 </html>

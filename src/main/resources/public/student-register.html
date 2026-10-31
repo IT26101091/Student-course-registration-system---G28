@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Student Portal | CourseHub</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/student-register.css">
+</head>
+<body class="registration-page">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="CourseHub home"><span class="brand-mark">C</span> CourseHub</a>
+    <nav class="top-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/students.html">Admin portal</a>
+    </nav>
+  </header>
+
+  <main class="registration-wrap">
+    <section class="registration-intro">
+      <p class="eyebrow">STUDENT PORTAL</p>
+      <h1>Create your student <span>profile.</span></h1>
+      <p class="intro-text">Enter your student details to create a profile in CourseHub. Once saved, your record will also appear in the administration dashboard.</p>
+      <div class="info-note">
+        <span class="info-icon" aria-hidden="true">i</span>
+        <p>This coursework demo creates a profile; it does not verify student identity or sign you in. Use test data while developing. Real deployment needs authentication or an approval process.</p>
+      </div>
+    </section>
+
+    <section class="registration-card" aria-labelledby="form-title">
+      <div class="card-heading">
+        <div class="profile-symbol" aria-hidden="true">♙</div>
+        <div>
+          <h2 id="form-title">Student details</h2>
+          <p>Fields marked with <span class="required">*</span> are required.</p>
+        </div>
+      </div>
+
+      <form id="self-registration-form" novalidate>
+        <div class="registration-grid">
+          <label class="register-field" for="self-student-id">
+            <span>Student ID <span class="required">*</span></span>
+            <input id="self-student-id" name="studentId" type="text" required maxlength="40" placeholder="e.g. STU001" autocomplete="off">
+            <small>Enter your university-assigned student ID.</small>
+          </label>
+          <label class="register-field" for="self-student-name">
+            <span>Full name <span class="required">*</span></span>
+            <input id="self-student-name" name="name" type="text" required maxlength="100" placeholder="e.g. Alex Silva" autocomplete="name">
+          </label>
+          <label class="register-field full-width" for="self-student-email">
+            <span>Email address <span class="required">*</span></span>
+            <input id="self-student-email" name="email" type="email" required maxlength="160" placeholder="name@example.com" autocomplete="email">
+          </label>
+          <label class="register-field full-width" for="self-degree-program">
+            <span>Degree programme <span class="required">*</span></span>
+            <input id="self-degree-program" name="degreeProgram" type="text" required maxlength="120" placeholder="e.g. Information Technology">
+          </label>
+        </div>
+
+        <p id="registration-error" class="notice error-notice" role="alert" hidden></p>
+        <section id="registration-success" class="success-panel" role="status" aria-live="polite" hidden>
+          <div class="success-symbol" aria-hidden="true">✓</div>
+          <div>
+            <h3>Profile created successfully</h3>
+            <p id="success-summary">Your student record has been saved.</p>
+            <p class="success-help">Your record will appear in the admin dashboard automatically when it refreshes.</p>
+          </div>
+        </section>
+
+        <div class="registration-actions" id="registration-actions">
+          <a class="text-link" href="/">Back to home</a>
+          <button class="submit-button" id="create-profile-button" type="submit">Create profile <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="success-actions" id="success-actions" hidden>
+          <button class="submit-button" id="register-another-button" type="button">Register another student</button>
+          <a class="secondary-button" href="/students.html">View admin dashboard</a>
+        </div>
+      </form>
+    </section>
+    <footer class="registration-footer">CourseHub · Java OOP Group Project</footer>
+  </main>
+  <script src="/js/student-register.js" defer></script>
+</body>
+</html>

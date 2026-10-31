@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Dashboard | CourseHub</title>
+  <style>
+    :root { color-scheme: light; --blue:#245ce6; --ink:#172b4d; --muted:#64748b; --line:#e2e8f0; --bg:#f1f5fb; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px max(22px,calc((100% - 1080px)/2)); background:#fff; border-bottom:1px solid var(--line); }
+    .brand { color:var(--blue); font-size:22px; font-weight:800; text-decoration:none; }
+    .userbar { display:flex; align-items:center; gap:14px; color:var(--muted); font-size:14px; }
+    button { border:0; border-radius:9px; padding:11px 15px; font-weight:700; cursor:pointer; }
+    .primary { background:var(--blue); color:white; }
+    .secondary { background:#eaf0ff; color:var(--blue); }
+    button:disabled { opacity:.65; cursor:wait; }
+    main { max-width:1080px; padding:32px 22px 44px; margin:auto; }
+    h1 { margin:4px 0 10px; font-size:30px; }
+    h2 { margin:8px 0 14px; font-size:20px; }
+    p { line-height:1.55; }
+    .muted { color:var(--muted); }
+    .eyebrow { color:var(--blue); font-size:12px; font-weight:800; letter-spacing:1.3px; margin:0; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:24px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:24px; box-shadow:0 7px 25px rgba(30,50,80,.045); margin-bottom:18px; }
+    dl { margin:0; }
+    dl div { display:grid; grid-template-columns:minmax(120px, .8fr) 1.2fr; gap:12px; padding:12px 0; border-bottom:1px solid #edf1f6; }
+    dl div:last-child { border-bottom:0; }
+    dt { color:var(--muted); font-size:14px; }
+    dd { margin:0; font-weight:700; overflow-wrap:anywhere; }
+    label { display:block; margin:15px 0 7px; font-size:14px; font-weight:700; }
+    input { width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px; font-size:15px; }
+    input:focus { outline:2px solid #bed0ff; border-color:var(--blue); }
+    form button { margin-top:17px; }
+    .alert { margin:16px 0; border-radius:9px; padding:12px 14px; background:#fff1f1; color:#9f2525; line-height:1.5; }
+    .success { background:#ecfdf3; color:#17663a; }
+    .notice { background:#eff6ff; border:1px solid #dbeafe; border-radius:12px; padding:16px; line-height:1.55; }
+    footer { margin-top:22px; color:var(--muted); font-size:13px; text-align:center; }
+    [hidden] { display:none !important; }
+    @media (max-width:720px) { .grid { grid-template-columns:1fr; } header { align-items:flex-start; } .userbar { flex-direction:column; align-items:flex-end; } h1 { font-size:25px; } .card { padding:19px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/student-dashboard.html">CourseHub</a>
+    <div class="userbar"><span id="signed-in-as">Checking account…</span><button class="secondary" id="logout-button" type="button">Sign out</button></div>
+  </header>
+
+  <main>
+    <section id="first-login-card" class="card" hidden>
+      <p class="eyebrow">ACCOUNT SECURITY</p>
+      <h1>Set your own password</h1>
+      <p class="muted">Your account still uses a temporary password. Change it to continue to your Student Dashboard.</p>
+      <form id="first-password-form">
+        <label for="first-current-password">Temporary password</label>
+        <input id="first-current-password" type="password" autocomplete="current-password" required>
+        <label for="first-new-password">New password (at least 8 characters)</label>
+        <input id="first-new-password" type="password" minlength="8" autocomplete="new-password" required>
+        <label for="first-confirm-password">Confirm new password</label>
+        <input id="first-confirm-password" type="password" minlength="8" autocomplete="new-password" required>
+        <button class="primary" id="first-password-button" type="submit">Change password</button>
+      </form>
+      <p id="first-message" class="alert" role="alert" hidden></p>
+    </section>
+
+    <section id="dashboard-content" hidden>
+      <p class="eyebrow">STUDENT WORKSPACE</p>
+      <h1>Welcome, <span id="welcome-name">Student</span>.</h1>
+      <p class="muted">View your profile and manage your CourseHub login details.</p>
+
+      <div class="grid">
+        <section class="card">
+          <p class="eyebrow">YOUR PROFILE</p>
+          <h2>Student details</h2>
+          <dl>
+            <div><dt>Full name</dt><dd id="profile-name">—</dd></div>
+            <div><dt>Student ID</dt><dd id="profile-id">—</dd></div>
+            <div><dt>Email</dt><dd id="profile-email">—</dd></div>
+            <div><dt>Degree programme</dt><dd id="profile-degree">—</dd></div>
+          </dl>
+          <p class="muted">Your permanent student ID stays the same even if you change your login username.</p>
+          <p id="profile-message" class="alert" role="alert" hidden></p>
+        </section>
+
+        <section class="card">
+          <p class="eyebrow">COURSE REGISTRATION</p>
+          <h2>Your courses</h2>
+          <div class="notice">Course registration has not been connected to this dashboard yet. We will connect the existing course and registration endpoints in the next step, so you can join and drop courses here.</div>
+        </section>
+      </div>
+
+      <div class="grid">
+        <section class="card">
+          <p class="eyebrow">ACCOUNT SECURITY</p>
+          <h2>Change username</h2>
+          <form id="username-form">
+            <label for="current-password-username">Current password</label>
+            <input id="current-password-username" type="password" autocomplete="current-password" required>
+            <label for="new-username">New username</label>
+            <input id="new-username" type="text" minlength="3" maxlength="40" pattern="[A-Za-z0-9._-]{3,40}" autocomplete="username" required>
+            <p class="muted">Use 3–40 letters, numbers, dots, underscores or hyphens.</p>
+            <button class="primary" id="username-button" type="submit">Save username</button>
+          </form>
+          <p id="username-message" class="alert" role="status" hidden></p>
+        </section>
+
+        <section class="card">
+          <p class="eyebrow">ACCOUNT SECURITY</p>
+          <h2>Change password</h2>
+          <form id="password-form">
+            <label for="current-password">Current password</label>
+            <input id="current-password" type="password" autocomplete="current-password" required>
+            <label for="new-password">New password (at least 8 characters)</label>
+            <input id="new-password" type="password" minlength="8" autocomplete="new-password" required>
+            <label for="confirm-password">Confirm new password</label>
+            <input id="confirm-password" type="password" minlength="8" autocomplete="new-password" required>
+            <button class="primary" id="password-button" type="submit">Save password</button>
+          </form>
+          <p id="password-message" class="alert" role="status" hidden></p>
+        </section>
+      </div>
+    </section>
+    <footer>CourseHub · Student Course Registration System</footer>
+  </main>
+
+  <script>
+    "use strict";
+    const byId = id => document.getElementById(id);
+    let account = null;
+
+    async function api(url, options = {}) {
+      const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+          ...(options.body ? { "Content-Type": "application/json" } : {}),
+          ...(options.headers || {})
+        }
+      });
+      const raw = response.status === 204 ? "" : await response.text();
+      let body = {};
+      if (raw) {
+        try { body = JSON.parse(raw); } catch { body = { error: raw }; }
+      }
+      if (!response.ok) {
+        if (response.status === 401) window.location.replace("/");
+        throw new Error(body.error || `Request failed (${response.status}).`);
+      }
+      return body;
+    }
+
+    function showMessage(id, text, success = false) {
+      const element = byId(id);
+      element.textContent = text;
+      element.hidden = false;
+      element.classList.toggle("success", success);
+    }
+
+    function hideMessage(id) {
+      byId(id).hidden = true;
+      byId(id).classList.remove("success");
+    }
+
+    async function loadProfile() {
+      try {
+        const student = await api(`/api/students/${encodeURIComponent(account.studentId)}`);
+        const name = student.name || student.fullName || "Student";
+        byId("welcome-name").textContent = name;
+        byId("profile-name").textContent = name;
+        byId("profile-id").textContent = student.studentId || account.studentId || "—";
+        byId("profile-email").textContent = student.email || "—";
+        byId("profile-degree").textContent = student.degreeProgram || student.degree || "—";
+      } catch (error) {
+        showMessage("profile-message", "Could not load your profile: " + error.message);
+      }
+    }
+
+    async function refreshAccount() {
+      account = await api("/api/auth/me");
+      byId("signed-in-as").textContent = `Signed in as ${account.username}`;
+      byId("new-username").value = account.username || "";
+      return account;
+    }
+
+    async function initialize() {
+      try {
+        account = await api("/api/auth/me");
+        if (account.role !== "STUDENT") {
+          window.location.replace(account.role === "ADMIN" ? "/students.html" : "/");
+          return;
+        }
+        byId("signed-in-as").textContent = `Signed in as ${account.username}`;
+        if (account.mustChangePassword) {
+          byId("first-login-card").hidden = false;
+          byId("dashboard-content").hidden = true;
+          return;
+        }
+        byId("first-login-card").hidden = true;
+        byId("dashboard-content").hidden = false;
+        byId("new-username").value = account.username || "";
+        await loadProfile();
+      } catch (error) {
+        if (!error.message.includes("401")) console.error(error);
+        window.location.replace("/");
+      }
+    }
+
+    byId("first-password-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      hideMessage("first-message");
+      const currentPassword = byId("first-current-password").value;
+      const newPassword = byId("first-new-password").value;
+      if (newPassword !== byId("first-confirm-password").value) {
+        showMessage("first-message", "The new passwords do not match.");
+        return;
+      }
+      const button = byId("first-password-button");
+      button.disabled = true;
+      try {
+        await api("/api/auth/change-password", {
+          method: "POST",
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        await initialize();
+        if (!account?.mustChangePassword) {
+          byId("first-password-form").reset();
+        }
+      } catch (error) {
+        showMessage("first-message", error.message);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    byId("username-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      hideMessage("username-message");
+      const currentPassword = byId("current-password-username").value;
+      const newUsername = byId("new-username").value.trim();
+      const button = byId("username-button");
+      button.disabled = true;
+      try {
+        const result = await api("/api/auth/change-username", {
+          method: "POST",
+          body: JSON.stringify({ currentPassword, newUsername })
+        });
+        account = result;
+        byId("signed-in-as").textContent = `Signed in as ${account.username}`;
+        byId("new-username").value = account.username || newUsername;
+        byId("current-password-username").value = "";
+        showMessage("username-message", "Username updated successfully.", true);
+      } catch (error) {
+        showMessage("username-message", error.message);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    byId("password-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      hideMessage("password-message");
+      const currentPassword = byId("current-password").value;
+      const newPassword = byId("new-password").value;
+      if (newPassword !== byId("confirm-password").value) {
+        showMessage("password-message", "The new passwords do not match.");
+        return;
+      }
+      if (newPassword === currentPassword) {
+        showMessage("password-message", "Choose a new password different from your current password.");
+        return;
+      }
+      const button = byId("password-button");
+      button.disabled = true;
+      try {
+        await api("/api/auth/change-password", {
+          method: "POST",
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        byId("password-form").reset();
+        showMessage("password-message", "Password updated successfully.", true);
+      } catch (error) {
+        showMessage("password-message", error.message);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    byId("logout-button").addEventListener("click", async () => {
+      try { await api("/api/auth/logout", { method: "POST" }); }
+      catch (error) { console.error(error); }
+      finally { window.location.replace("/"); }
+    });
+
+    initialize();
+  </script>
+</body>
+</html>
