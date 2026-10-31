@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting Queue | CourseHub</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 32px;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .muted {
+            color: #64748b;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px #0f172a0d;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button, .back-link {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .back-link {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .queue-count {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .message {
+            padding: 20px 0;
+            color: #64748b;
+        }
+
+        .error {
+            color: #b91c1c;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header class="header">
+        <div>
+            <h1>Waiting Queue</h1>
+            <p class="muted">View students waiting for a course.</p>
+        </div>
+        <a class="back-link" href="/students.html">← Back to Students</a>
+    </header>
+
+    <section class="card">
+        <h2>Find a course queue</h2>
+        <p class="muted">Enter the course code to view its waiting list.</p>
+
+        <form id="queue-form" class="controls">
+            <input
+                    id="course-code"
+                    type="text"
+                    placeholder="e.g. IT101"
+                    required
+                    maxlength="50"
+            >
+            <button id="view-button" type="submit">View Queue</button>
+            <button id="refresh-button" type="button">Refresh</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <p class="muted">Course code</p>
+        <h2 id="selected-course">Not selected</h2>
+        <p class="muted">Students in queue</p>
+        <p class="queue-count" id="queue-count">—</p>
+        <p id="status-message" class="message" role="status">
+            Enter a course code to view its queue.
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>QUEUE POSITION</th>
+                    <th>STUDENT ID</th>
+                    <th>JOINED AT</th>
+                </tr>
+                </thead>
+                <tbody id="queue-table-body">
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    const form = document.getElementById("queue-form");
+    const courseInput = document.getElementById("course-code");
+    const viewButton = document.getElementById("view-button");
+    const refreshButton = document.getElementById("refresh-button");
+    const selectedCourse = document.getElementById("selected-course");
+    const queueCount = document.getElementById("queue-count");
+    const statusMessage = document.getElementById("status-message");
+    const tableBody = document.getElementById("queue-table-body");
+
+    async function loadQueue(courseCode) {
+        courseCode = courseCode.trim();
+
+        if (!courseCode) {
+            statusMessage.textContent = "Please enter a course code.";
+            statusMessage.className = "message error";
+            return;
+        }
+
+        selectedCourse.textContent = courseCode;
+        queueCount.textContent = "…";
+        tableBody.replaceChildren();
+        statusMessage.textContent = "Loading waiting queue...";
+        statusMessage.className = "message";
+        viewButton.disabled = true;
+        refreshButton.disabled = true;
+
+        try {
+            const response = await fetch(
+                "/api/queue/" + encodeURIComponent(courseCode),
+                {
+                    headers: { "Accept": "application/json" }
+                }
+            );
+
+            if (response.status === 401 || response.status === 403) {
+                throw new Error("Please log in with an account that has permission to view the queue.");
+            }
+
+            if (!response.ok) {
+                throw new Error("Could not load the queue (HTTP " + response.status + ").");
+            }
+
+            const entries = await response.json();
+
+            if (!Array.isArray(entries)) {
+                throw new Error("The server returned an unexpected response.");
+            }
+
+            queueCount.textContent = entries.length;
+
+            if (entries.length === 0) {
+                statusMessage.textContent = "No students are waiting for this course.";
+                statusMessage.className = "message";
+                return;
+            }
+
+            statusMessage.textContent = "Waiting queue loaded successfully.";
+            statusMessage.className = "message";
+
+            entries.forEach((entry, index) => {
+                const row = document.createElement("tr");
+
+                const positionCell = document.createElement("td");
+                positionCell.textContent = index + 1;
+
+                const studentCell = document.createElement("td");
+                studentCell.textContent = entry.studentId ?? "Unknown";
+
+                const joinedCell = document.createElement("td");
+                joinedCell.textContent = entry.joinedAt
+                    ? new Date(entry.joinedAt).toLocaleString()
+                    : "—";
+
+                row.append(positionCell, studentCell, joinedCell);
+                tableBody.appendChild(row);
+            });
+
+        } catch (error) {
+            queueCount.textContent = "—";
+            statusMessage.textContent =
+                error.message || "Something went wrong while loading the queue.";
+            statusMessage.className = "message error";
+        } finally {
+            viewButton.disabled = false;
+            refreshButton.disabled = false;
+        }
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        loadQueue(courseInput.value);
+    });
+
+    refreshButton.addEventListener("click", function () {
+        loadQueue(courseInput.value);
+    });
+</script>
+</body>
+</html>
+```

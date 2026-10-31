@@ -15,6 +15,7 @@ import io.javalin.http.UnauthorizedResponse;
 import com.coursehub.routes.AdminAccountRoutes;
 import com.coursehub.routes.CourseRoutes;
 import com.coursehub.service.CourseRegistrationService;
+import com.coursehub.routes.QueueRoutes;
 import java.util.Map;
 
 public class Main {
@@ -77,6 +78,8 @@ public class Main {
             System.out.println("Initial Admin account created.");
         }
         CourseRoutes courseRoutes = new CourseRoutes();
+        QueueRoutes queueRoutes = new QueueRoutes();
+
 
         CourseRegistrationService courseRegistrationService =
                 new CourseRegistrationService();
@@ -161,9 +164,20 @@ public class Main {
                     authRoutes::changeUsername
             );
             // Course list API - sorted by course title
+
             config.routes.get(
                     "/api/courses",
                     courseRoutes::getAll
+            );
+            // Waiting Queue API
+            config.routes.get(
+                    "/api/queue/{courseCode}",
+                    queueRoutes::getByCourse
+            );
+
+            config.routes.post(
+                    "/api/queue/{courseCode}/process-next",
+                    queueRoutes::processNext
             );
 
 // Register a student for a course
