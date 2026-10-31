@@ -13,7 +13,8 @@ import io.javalin.http.staticfiles.Location;
 import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.UnauthorizedResponse;
 import com.coursehub.routes.AdminAccountRoutes;
-
+import com.coursehub.routes.CourseRoutes;
+import com.coursehub.service.CourseRegistrationService;
 import java.util.Map;
 
 public class Main {
@@ -75,6 +76,10 @@ public class Main {
 
             System.out.println("Initial Admin account created.");
         }
+        CourseRoutes courseRoutes = new CourseRoutes();
+
+        CourseRegistrationService courseRegistrationService =
+                new CourseRegistrationService();
 
         Javalin app = Javalin.create(config -> {
 
@@ -155,6 +160,36 @@ public class Main {
                     "/api/auth/change-username",
                     authRoutes::changeUsername
             );
+            // Course list API - sorted by course title
+            config.routes.get(
+                    "/api/courses",
+                    courseRoutes::getAll
+            );
+
+// Register a student for a course
+            config.routes.post(
+                    "/api/courses/{courseCode}/register",
+                    ctx -> {
+                        String result = courseRegistrationService.registerStudent(
+                                ctx.pathParam("courseCode"),
+                                ctx.bodyAsClass(Map.class).get("studentId").toString()
+                        );
+                        ctx.json(Map.of("message", result));
+                    }
+            );
+
+// Cancel a student's course registration
+            config.routes.post(
+                    "/api/courses/{courseCode}/cancel",
+                    ctx -> {
+                        String result = courseRegistrationService.cancelRegistration(
+                                ctx.pathParam("courseCode"),
+                                ctx.bodyAsClass(Map.class).get("studentId").toString()
+                        );
+                        ctx.json(Map.of("message", result));
+                    }
+            );
+
 
             // Student CRUD API.
             config.routes.get(
