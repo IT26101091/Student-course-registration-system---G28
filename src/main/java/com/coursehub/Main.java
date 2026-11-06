@@ -187,11 +187,7 @@ public class Main {
             config.routes.delete(
                     "/api/students/{studentId}",
                     studentRoutes::delete);
-            //student account creation
-            config.routes.post(
-                    "/api/admin/accounts",
-                    adminAccountRoutes::createStudentAccount
-            );
+
             // Course CRUD API.
             config.routes.get(
                     "/api/courses",
@@ -212,6 +208,12 @@ public class Main {
             config.routes.delete(
                     "/api/courses/{courseCode}",
                     courseRoutes::delete);
+
+            //student account creation
+            config.routes.post(
+                    "/api/admin/accounts",
+                    adminAccountRoutes::createStudentAccount
+            );
 
 
         }).start(7070);
