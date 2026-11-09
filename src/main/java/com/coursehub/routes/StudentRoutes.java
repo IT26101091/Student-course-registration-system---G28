@@ -3,6 +3,7 @@ package com.coursehub.routes;
 
 import com.coursehub.model.Student;
 import com.coursehub.service.StudentService;
+import com.coursehub.repository.AccountRepository;
 import io.javalin.http.Context;
 
 import java.util.Map;
@@ -10,9 +11,14 @@ import java.util.Map;
 public class StudentRoutes {
 
     private final StudentService service;
+    private final AccountRepository accountRepository;
 
-    public StudentRoutes(StudentService service) {
+    public StudentRoutes(
+            StudentService service,
+            AccountRepository accountRepository) {
+
         this.service = service;
+        this.accountRepository = accountRepository;
     }
 
     public void getAll(Context ctx) {
@@ -50,7 +56,15 @@ public class StudentRoutes {
         handle(ctx, () -> {
             String id = ctx.pathParam("studentId");
 
+            // First, check that the student exists.
+            service.getStudent(id);
+
+            // Delete the student record.
             service.deleteStudent(id);
+
+            // Delete the associated login account.
+            accountRepository.deleteByStudentId(id);
+
             ctx.status(204);
         });
     }

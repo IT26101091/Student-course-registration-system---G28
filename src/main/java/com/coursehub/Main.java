@@ -26,12 +26,14 @@ public class Main {
         StudentService studentService =
                 new StudentService(studentRepository);
 
-        StudentRoutes studentRoutes =
-                new StudentRoutes(studentService);
-
-
         AccountRepository accountRepository =
                 new AccountRepository();
+
+        StudentRoutes studentRoutes = new StudentRoutes(
+                studentService,
+                accountRepository
+        );
+
 
         AccountService accountService =
                 new AccountService(accountRepository);
