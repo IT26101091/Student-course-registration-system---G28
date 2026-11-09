@@ -31,9 +31,10 @@ public class Main {
 
         StudentRoutes studentRoutes = new StudentRoutes(
                 studentService,
-                accountRepository
+                accountRepository,
+                registrationRepository,
+                queueRepository
         );
-
 
         AccountService accountService =
                 new AccountService(accountRepository);
