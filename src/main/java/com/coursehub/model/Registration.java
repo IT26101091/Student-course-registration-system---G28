@@ -1,6 +1,8 @@
 
 package com.coursehub.model;
 
+import java.time.LocalDateTime;
+
 public class Registration {
 
     public static final String ACTIVE = "ACTIVE";
@@ -9,7 +11,7 @@ public class Registration {
     private String registrationId;
     private String studentId;
     private String courseCode;
-    private String registrationDate;
+    private LocalDateTime registrationDateTime;
     private String status = ACTIVE;
 
     public Registration() {
@@ -18,12 +20,13 @@ public class Registration {
     public Registration(String registrationId,
                         String studentId,
                         String courseCode,
-                        String registrationDate,
+                        LocalDateTime registrationDateTime,
                         String status) {
+
         this.registrationId = registrationId;
         this.studentId = studentId;
         this.courseCode = courseCode;
-        this.registrationDate = registrationDate;
+        this.registrationDateTime = registrationDateTime;
         this.status = status;
     }
 
@@ -51,14 +54,13 @@ public class Registration {
         this.courseCode = courseCode;
     }
 
-    public String getRegistrationDate() {
-        return registrationDate;
+    public LocalDateTime getRegistrationDateTime() {
+        return registrationDateTime;
     }
 
-    public void setRegistrationDate(String registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setRegistrationDateTime(LocalDateTime registrationDateTime) {
+        this.registrationDateTime = registrationDateTime;
     }
-
     public String getStatus() {
         return status;
     }

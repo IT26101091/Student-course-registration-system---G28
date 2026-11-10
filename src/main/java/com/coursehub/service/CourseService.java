@@ -3,6 +3,9 @@ package com.coursehub.service;
 
 import com.coursehub.model.Course;
 import com.coursehub.repository.CourseRepository;
+import com.coursehub.model.Registration;
+import com.coursehub.repository.RegistrationRepository;
+import com.coursehub.repository.QueueRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +13,25 @@ import java.util.Optional;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final RegistrationRepository registrationRepository;
+    private final QueueRepository queueRepository;
 
     public CourseService() {
-        this.courseRepository = new CourseRepository();
+        this(
+                new CourseRepository(),
+                new RegistrationRepository(),
+                new QueueRepository()
+        );
+    }
+
+    public CourseService(
+            CourseRepository courseRepository,
+            RegistrationRepository registrationRepository,
+            QueueRepository queueRepository) {
+
+        this.courseRepository = courseRepository;
+        this.registrationRepository = registrationRepository;
+        this.queueRepository = queueRepository;
     }
 
     // Get all courses
@@ -61,17 +80,45 @@ public class CourseService {
 
     // Delete a course
     public void deleteCourse(String courseCode) {
+
         if (courseCode == null || courseCode.isBlank()) {
             throw new IllegalArgumentException(
                     "Course code is required.");
         }
 
-        boolean deleted = courseRepository.deleteByCode(courseCode);
-
-        if (!deleted) {
+        // Check whether the course exists.
+        if (courseRepository.findByCode(courseCode).isEmpty()) {
             throw new IllegalArgumentException(
                     "Course not found.");
         }
+
+        // Check for active registrations.
+        long activeRegistrations =
+                registrationRepository.findByCourseCode(courseCode)
+                        .stream()
+                        .filter(registration ->
+                                Registration.ACTIVE.equalsIgnoreCase(
+                                        registration.getStatus()))
+                        .count();
+
+        // Check for waiting students.
+        long waitingStudents =
+                queueRepository.findWaitingByCourseCode(courseCode).size();
+
+        // Prevent deletion if either exists.
+        if (activeRegistrations > 0 || waitingStudents > 0) {
+
+            throw new IllegalStateException(
+                    "Cannot delete this course. It has "
+                            + activeRegistrations
+                            + " active registrations and "
+                            + waitingStudents
+                            + " students in the waiting list."
+            );
+        }
+
+        // Delete only if no active registrations or waiting students exist.
+        courseRepository.deleteByCode(courseCode);
     }
 
     // Validate course details

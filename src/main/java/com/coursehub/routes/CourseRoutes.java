@@ -74,6 +74,10 @@ public class CourseRoutes {
         try {
             action.run();
 
+        } catch (IllegalStateException e) {
+            ctx.status(409).json(
+                    Map.of("error", e.getMessage()));
+
         } catch (IllegalArgumentException e) {
             ctx.status(400).json(
                     Map.of("error", e.getMessage()));
