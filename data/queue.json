@@ -1,0 +1,57 @@
+[ {
+  "queueId" : "QUEUE-5fc6c781-65ba-4911-849c-6df8fa5e5c13",
+  "studentId" : "STU002",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T13:13:04.9885608",
+  "position" : 0,
+  "status" : "PROMOTED"
+}, {
+  "queueId" : "QUEUE-5db82bdc-bb6b-4fb2-b80c-ea4fb1b7dfca",
+  "studentId" : "STU003",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T13:15:57.4792194",
+  "position" : 0,
+  "status" : "CANCELLED"
+}, {
+  "queueId" : "QUEUE-dc2787b9-29c4-49b1-bf89-eb3f76753aa0",
+  "studentId" : "STU003",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T13:27:52.9911076",
+  "position" : 0,
+  "status" : "CANCELLED"
+}, {
+  "queueId" : "QUEUE-ed0609ef-7d99-4c72-8acc-f015315733ec",
+  "studentId" : "STU001",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T13:29:10.940667",
+  "position" : 0,
+  "status" : "CANCELLED"
+}, {
+  "queueId" : "QUEUE-e74b5f79-a5d1-413c-8f38-3186247c1624",
+  "studentId" : "STU001",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T14:00:38.4658674",
+  "position" : 0,
+  "status" : "PROMOTED"
+}, {
+  "queueId" : "QUEUE-5c378798-2710-41de-80ea-bac3d64b87f6",
+  "studentId" : "STU002",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T20:14:22.6888347",
+  "position" : 0,
+  "status" : "PROMOTED"
+}, {
+  "queueId" : "QUEUE-263e8ca3-63b7-4c19-a0c0-3ff1bb7c03bd",
+  "studentId" : "STU002",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T21:29:09.7449303",
+  "position" : 0,
+  "status" : "PROMOTED"
+}, {
+  "queueId" : "QUEUE-ae0c23bc-326f-4280-a64b-779de40603c6",
+  "studentId" : "STU003",
+  "courseCode" : "TEST01",
+  "queueDateTime" : "2026-11-09T23:26:35.2558687",
+  "position" : 1,
+  "status" : "WAITING"
+} ]

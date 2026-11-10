@@ -1,0 +1,209 @@
+### CourseHub authentication route tests
+### Start the Javalin server on port 7070 before running these requests.
+### IntelliJ HTTP Client keeps session cookies between requests in this file.
+
+@baseUrl = http://localhost:7070
+
+# Replace these values after an Admin/student account has been created.
+@username = STU002
+@password = 12345678
+@newPassword = Hollow_1274
+@newUsername = admin
+@studentId = stu003
+@courseCode = cs010
+
+### 1. Check current account before login (should return 401)
+GET {{baseUrl}}/api/auth/me
+Accept: application/json
+
+> {%
+    client.test("Request without login returns 401", function () {
+        client.assert(response.status === 401, "Expected HTTP 401 before login");
+    });
+%}
+
+### 2. Log in (requires a real existing account; should return 200)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {%
+    client.test("Login succeeds", function () {
+        client.assert(response.status === 200, "Expected HTTP 200; check username/password and that the account exists");
+        client.assert(response.body.accountId !== undefined, "Expected accountId in response");
+        client.assert(response.body.passwordHash === undefined, "Password hash must not be returned");
+    });
+%}
+
+### 3. Check the logged-in account (should return 200 after successful login)
+GET {{baseUrl}}/api/auth/me
+Accept: application/json
+
+> {%
+    client.test("Current account is returned", function () {
+        client.assert(response.status === 200, "Expected HTTP 200 after login");
+        client.assert(response.body.username !== undefined, "Expected username in response");
+        client.assert(response.body.role !== undefined, "Expected role in response");
+        client.assert(response.body.passwordHash === undefined, "Password hash must not be returned");
+    });
+%}
+
+### 4. Change username (OPTIONAL: this permanently changes the account username)
+### First update @newUsername above to a unique username.
+POST {{baseUrl}}/api/auth/change-username
+Content-Type: application/json
+Accept: application/json
+
+{
+  "currentPassword": "{{password}}",
+  "newUsername": "{{newUsername}}"
+}
+
+### 5. Change password (OPTIONAL: this permanently changes the account password)
+### Run only if you are ready to replace the current password. Update @password above as needed for later logins.
+POST {{baseUrl}}/api/auth/change-password
+Content-Type: application/json
+Accept: application/json
+
+{
+  "currentPassword": "{{password}}",
+  "newPassword": "{{newPassword}}"
+}
+
+### 6. Log out (should return 204)
+POST {{baseUrl}}/api/auth/logout
+
+> {%
+    client.test("Logout succeeds", function () {
+        client.assert(response.status === 204, "Expected HTTP 204 after logout");
+    });
+%}
+
+### 7. Confirm logout worked (should return 401)
+GET {{baseUrl}}/api/auth/me
+Accept: application/json
+
+> {%
+    client.test("Logged-out session is rejected", function () {
+        client.assert(response.status === 401, "Expected HTTP 401 after logout");
+    });
+%}
+
+###8 View existing student records
+GET http://localhost:7070/api/students
+Accept: application/json
+
+### Create a student login account
+POST http://localhost:7070/api/admin/accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "studentId": "STU001",
+  "temporaryPassword": "StudentTemp2026!"
+}
+
+### Change student password
+POST {{baseUrl}}/api/auth/change-password
+Content-Type: application/json
+
+{
+  "currentPassword": "StudentTemp2026!",
+  "newPassword": "Hollow1274"
+}
+
+### Test: Student cannot create Admin accounts
+POST http://localhost:7070/api/admin/accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "studentId": "TEST-ID",
+  "temporaryPassword": "TemporaryTest123!"
+}
+
+### Test: Student cannot view the full student list
+GET http://localhost:7070/api/students
+Accept: application/json
+
+### Student views their own record
+GET http://localhost:7070/api/students/STU001
+Accept: application/json
+
+### View All Registrations
+GET http://localhost:7070/api/registrations
+Accept: application/json
+
+###
+POST {{baseUrl}}/api/registrations
+Content-Type: application/json
+Accept: application/json
+
+{
+  "studentId": "{{studentId}}",
+  "courseCode": "{{courseCode}}"
+}
+### GET registration by ID
+GET http://localhost:7070/api/registrations/REG-50dc4fc9-9ace-47b5-a47c-451fb272af1b
+Accept: application/json
+
+### GET registrations by student ID
+GET http://localhost:7070/api/registrations/student/STU002
+Accept: application/json
+
+### GET registrations by course code
+GET http://localhost:7070/api/registrations/course/cs010
+Accept: application/json
+
+### UPDATE registration status
+PUT http://localhost:7070/api/registrations/REG-5a64b5ee-d3ad-46d9-a869-ec86e5ba5990/status
+Content-Type: application/json
+
+{
+  "status": "CANCELLED"
+}
+
+### DELETE registration
+DELETE http://localhost:7070/api/registrations/REG-50dc4fc9-9ace-47b5-a47c-451fb272af1b
+
+### Get registrations sorted by registration time
+GET http://localhost:7070/api/registrations/sorted-by-time
+
+### Student B joins queue
+POST http://localhost:7070/api/queue
+Content-Type: application/json
+Cookie: node0glj0obmnlwlg11h9ei3okuzhj4.node0
+
+{
+  "courseCode": "TEST01"
+}
+###
+POST http://localhost:7070/api/queue
+Content-Type: application/json
+Cookie: JSESSIONID=node0hy1i9maq1whcmib0iwskxv51.node0
+
+{
+  "courseCode": "TEST01"
+}
+
+
+###
+DELETE http://localhost:7070/api/registrations/REG-6793c583-6b7e-4f18-ac19-0378d42fe4ae
+Cookie: JSESSIONID=node0e5bgrju0by7kz6zku09so82z2.node0
+
+### Student C cancels waiting-list request
+DELETE http://localhost:7070/api/queue/TEST01
+Cookie: JSESSIONID=node04pz85pbcmxxn1a0w8ax7jquei3.node0
+
+### Admin views course waiting list
+GET http://localhost:7070/api/queue/course/TEST01
+Cookie: JSESSIONID=node01xiae41pswt90amznw8cpa1q84.node0
+
+###
+GET http://localhost:7070/api/queue/course/TEST01
+Cookie: JSESSIONID=node01nsyznkdz5wd11cg4t9snkzltj0.node0
