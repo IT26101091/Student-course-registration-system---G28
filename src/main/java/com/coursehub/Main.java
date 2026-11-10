@@ -11,6 +11,12 @@ import com.coursehub.repository.AccountRepository;
 import com.coursehub.routes.AuthRoutes;
 import com.coursehub.service.AccountService;
 import com.coursehub.routes.AuthAccessControl;
+import com.coursehub.routes.RegistrationRoutes;
+import com.coursehub.service.RegistrationService;
+import com.coursehub.repository.RegistrationRepository;
+import com.coursehub.repository.QueueRepository;
+import com.coursehub.service.QueueService;
+import com.coursehub.routes.QueueRoutes;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.http.ForbiddenResponse;
@@ -29,22 +35,60 @@ public class Main {
         StudentService studentService =
                 new StudentService(studentRepository);
 
-        StudentRoutes studentRoutes =
-                new StudentRoutes(studentService);
+
 
         // Course management
         CourseRepository courseRepository =
                 new CourseRepository();
 
+        RegistrationRepository registrationRepository =
+                new RegistrationRepository();
+
+        QueueRepository queueRepository = new QueueRepository();
+
         CourseService courseService =
-                new CourseService();
+                new CourseService(
+                        courseRepository,
+                        registrationRepository,
+                        queueRepository
+                );
 
         CourseRoutes courseRoutes =
                 new CourseRoutes(courseService);
-
+//
 
         AccountRepository accountRepository =
                 new AccountRepository();
+
+
+
+        RegistrationService registrationService =
+                new RegistrationService(
+                        registrationRepository,
+                        studentRepository,
+                        courseRepository
+                );
+
+
+
+        QueueService queueService = new QueueService(
+                queueRepository,
+                registrationRepository,
+                studentRepository,
+                courseRepository
+        );
+
+        RegistrationRoutes registrationRoutes =
+                new RegistrationRoutes(
+                        registrationService,
+                        accountRepository,
+                        queueService
+                );
+
+        QueueRoutes queueRoutes = new QueueRoutes(
+                queueService,
+                accountRepository
+        );
 
         StudentRoutes studentRoutes = new StudentRoutes(
                 studentService,
@@ -194,7 +238,7 @@ public class Main {
             config.routes.delete(
                     "/api/students/{studentId}",
                     studentRoutes::delete);
-
+//
             // Course CRUD API.
             config.routes.get(
                     "/api/courses",
@@ -215,12 +259,84 @@ public class Main {
             config.routes.delete(
                     "/api/courses/{courseCode}",
                     courseRoutes::delete);
-
+//
             //student account creation
             config.routes.post(
                     "/api/admin/accounts",
                     adminAccountRoutes::createStudentAccount
             );
+
+            // Registration Management API
+
+            // Get registrations sorted by registration time
+            config.routes.get(
+                    "/api/registrations/sorted-by-time",
+                    registrationRoutes::getSortedByTime
+            );
+
+            config.routes.get(
+                    "/api/registrations",
+                    registrationRoutes::getAll
+            );
+
+            config.routes.get(
+                    "/api/registrations/{registrationId}",
+                    registrationRoutes::getOne
+            );
+
+            config.routes.get(
+                    "/api/registrations/student/{studentId}",
+                    registrationRoutes::getByStudent
+            );
+
+            config.routes.get(
+                    "/api/registrations/course/{courseCode}",
+                    registrationRoutes::getByCourse
+            );
+
+            config.routes.post(
+                    "/api/registrations",
+                    registrationRoutes::create
+            );
+
+            config.routes.delete(
+                    "/api/registrations/{registrationId}",
+                    registrationRoutes::delete
+            );
+
+            config.routes.put(
+                    "/api/registrations/{registrationId}/status",
+                    registrationRoutes::changeStatus
+            );
+
+            // Queue routes
+            config.routes.post(
+                    "/api/queue",
+                    queueRoutes::joinQueue
+            );
+
+
+            config.routes.post(
+                    "/api/queue/admin",
+                    queueRoutes::adminJoinQueue
+            );
+
+            config.routes.get(
+                    "/api/queue/course/{courseCode}",
+                    queueRoutes::getWaitingList
+            );
+
+            config.routes.get(
+                    "/api/queue/my-position/{courseCode}",
+                    queueRoutes::getMyQueuePosition
+            );
+
+            config.routes.delete(
+                    "/api/queue/{courseCode}",
+                    queueRoutes::cancelQueueRequest
+            );
+
+
 
 
         }).start(7070);
