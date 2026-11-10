@@ -1,37 +1,7 @@
 [ {
-  "courseCode" : "IE1011",
-  "title" : "INFORMATION SYSTEMS",
-  "description" : "IS",
-  "credits" : 3,
-  "capacity" : 5
-}, {
-  "courseCode" : "IT1150",
-  "title" : "TECHNICAL WRITING",
-  "description" : "TW",
-  "credits" : 4,
-  "capacity" : 5
-}, {
-  "courseCode" : "IT1160",
-  "title" : "DISCRETE MATHEMATICS",
-  "description" : "DM",
-  "credits" : 4,
-  "capacity" : 5
-}, {
-  "courseCode" : "IT1170",
-  "title" : "DATA STRUCTURES AND ALGORITHMS",
-  "description" : "DSA",
-  "credits" : 4,
-  "capacity" : 5
-}, {
-  "courseCode" : "SE1020",
-  "title" : "OBJECT ORIENTED PROGRAMMING",
-  "description" : "OOP",
-  "credits" : 4,
-  "capacity" : 5
-}, {
-  "courseCode" : "TEST01",
-  "title" : "TEST",
-  "description" : "TEST",
-  "credits" : 4,
-  "capacity" : 1
+  "courseCode" : "CS0101",
+  "title" : "introduction to programming",
+  "description" : "this course",
+  "credits" : 6,
+  "capacity" : 40
 } ]

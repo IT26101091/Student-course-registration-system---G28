@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0f172a">
+
+    <title>Registration Management | CourseHub</title>
+
+    <link rel="stylesheet" href="/css/students.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <a class="brand" href="/" aria-label="CourseHub home">
+            <span class="brand-mark">C</span>
+            <span>CourseHub</span>
+        </a>
+
+        <p class="nav-label">WORKSPACE</p>
+
+        <nav class="side-nav" aria-label="Admin navigation">
+
+            <a class="nav-item" href="/">
+                <span class="nav-icon" aria-hidden="true">⌂</span>
+                <span>Home</span>
+            </a>
+
+            <a class="nav-item" href="/students.html">
+                <span class="nav-icon" aria-hidden="true">♙</span>
+                <span>Students</span>
+            </a>
+
+            <a class="nav-item" href="/courses.html">
+                <span class="nav-icon" aria-hidden="true">▤</span>
+                <span>Courses</span>
+            </a>
+
+            <a class="nav-item active" href="/registrations.html" aria-current="page">
+                <span class="nav-icon" aria-hidden="true">▣</span>
+                <span>Registrations</span>
+            </a>
+
+            <a class="nav-item" href="/queue.html">
+                <span class="nav-icon" aria-hidden="true">◷</span>
+                <span>Waiting queue</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="team-mark">CH</div>
+            <div class="team-copy">
+                <strong>CourseHub Admin</strong>
+                <span>University Workspace</span>
+            </div>
+            <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button" title="Sign out">
+                <span aria-hidden="true">↪</span>
+            </button>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="breadcrumbs">
+                <a href="/">Home</a>
+                <span>/</span>
+                <span>Registrations</span>
+            </div>
+
+            <div class="topbar-right">
+                <span class="connection-pill">
+                    <span class="connection-dot"></span>
+                    Java server active
+                </span>
+                <div class="avatar" title="Administrator">A</div>
+                <button class="admin-logout-btn" id="admin-logout-btn" type="button" title="Sign out of Admin Portal">
+                    <span class="admin-logout-icon" aria-hidden="true">↪</span>
+                    <span>Sign out</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Heading -->
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">ADMINISTRATION</p>
+                <h1>Registration management</h1>
+                <p class="page-description">
+                    View, filter, sort and manage student course enrollments in real time.
+                </p>
+            </div>
+
+            <button class="button button-primary"
+                    id="add-registration-button"
+                    type="button">
+                <span class="button-plus" aria-hidden="true">＋</span> Add registration
+            </button>
+        </section>
+
+        <!-- Statistics Grid -->
+        <section class="stats-grid" aria-label="Registration statistics">
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon blue">▣</span>
+                    <span class="stat-tag">All records</span>
+                </div>
+                <p class="stat-label">Total registrations</p>
+                <p class="stat-value" id="total-registrations">—</p>
+                <p class="stat-note">Enrollments recorded in system</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon green">✓</span>
+                    <span class="stat-tag">Current</span>
+                </div>
+                <p class="stat-label">Active registrations</p>
+                <p class="stat-value" id="active-registrations">—</p>
+                <p class="stat-note">Students currently enrolled</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon violet">⌕</span>
+                    <span class="stat-tag">History</span>
+                </div>
+                <p class="stat-label">Cancelled registrations</p>
+                <p class="stat-value" id="cancelled-registrations">—</p>
+                <p class="stat-note">Dropped or withdrawn courses</p>
+            </article>
+
+        </section>
+
+        <!-- Registration Table Card -->
+        <section class="table-card">
+
+            <div class="table-card-heading">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=120&q=80"
+                         alt="Enrollment registrations"
+                         style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line);"
+                         onerror="this.style.display='none';">
+                    <div>
+                        <h2 id="table-heading">All registrations</h2>
+                        <p id="sort-description">
+                            View student registrations and their current status.
+                        </p>
+                    </div>
+                </div>
+
+                <label class="search-box" for="registration-search">
+                    <span aria-hidden="true">⌕</span>
+                    <input
+                            id="registration-search"
+                            type="search"
+                            placeholder="Search registrations…"
+                            autocomplete="off">
+                    <kbd>⌘ K</kbd>
+                </label>
+            </div>
+
+            <!-- Registration Filters and Sorting -->
+            <div class="registration-controls">
+
+                <div class="registration-filter-row">
+                    <span class="control-label">FILTER:</span>
+                    <button class="filter-button active" data-filter="ALL" type="button">All</button>
+                    <button class="filter-button" data-filter="ACTIVE" type="button">Active</button>
+                    <button class="filter-button" data-filter="CANCELLED" type="button">Cancelled</button>
+                </div>
+
+                <div class="registration-sort-row">
+                    <span class="control-label">SORT:</span>
+                    <button class="sort-button active" data-sort="DEFAULT" type="button">Default View</button>
+                    <button class="sort-button" data-sort="OLDEST" type="button">Oldest First (Insertion Sort)</button>
+                    <button class="sort-button" data-sort="NEWEST" type="button">Newest First</button>
+                </div>
+
+            </div>
+
+            <!-- Table Wrap -->
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">REGISTRATION ID</th>
+                        <th scope="col">STUDENT</th>
+                        <th scope="col">COURSE</th>
+                        <th scope="col">REGISTERED DATE</th>
+                        <th scope="col">STATUS</th>
+                        <th scope="col" class="actions-heading">ACTIONS</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="registrations-table-body">
+                    <tr>
+                        <td colspan="6" class="table-message">
+                            Loading registrations…
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <span id="table-summary">
+                    Loading registrations…
+                </span>
+
+                <button class="button button-subtle"
+                        id="refresh-button"
+                        type="button">
+                    <span aria-hidden="true">↻</span> Refresh
+                </button>
+            </div>
+
+        </section>
+
+        <footer class="page-footer">
+            <span>CourseHub · Student Course Registration System</span>
+            <span>Java OOP Group Project</span>
+        </footer>
+
+    </main>
+
+</div>
+
+<!-- Add Registration Dialog -->
+<dialog class="student-dialog" id="registration-dialog" aria-labelledby="dialog-title">
+
+    <form id="registration-form" novalidate>
+
+        <div class="dialog-heading">
+            <div>
+                <p class="eyebrow">REGISTRATION RECORD</p>
+                <h2 id="dialog-title">Add registration</h2>
+                <p>Select a student and a course. If the course is full, the student will automatically join the waitlist.</p>
+            </div>
+
+            <button class="icon-button"
+                    id="close-dialog-button"
+                    type="button"
+                    aria-label="Close dialog">
+                ×
+            </button>
+        </div>
+
+        <div class="form-grid">
+
+            <label class="form-field full-width" for="student-select">
+                <span>Student <span class="required">*</span></span>
+                <select id="student-select" required>
+                    <option value="">Loading students...</option>
+                </select>
+            </label>
+
+            <label class="form-field full-width" for="course-select">
+                <span>Course <span class="required">*</span></span>
+                <select id="course-select" required>
+                    <option value="">Loading courses...</option>
+                </select>
+            </label>
+
+        </div>
+
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+
+        <div class="dialog-actions">
+            <button class="button button-subtle"
+                    id="cancel-dialog-button"
+                    type="button">
+                Cancel
+            </button>
+
+            <button class="button button-primary"
+                    id="save-registration-button"
+                    type="submit">
+                Create registration
+            </button>
+        </div>
+
+    </form>
+
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+    (() => {
+        "use strict";
+
+        // API ENDPOINTS
+        const REGISTRATION_API = "/api/registrations";
+        const STUDENT_API = "/api/students";
+        const COURSE_API = "/api/courses";
+
+        // STORED DATA
+        let registrations = [];
+        let students = [];
+        let courses = [];
+
+        // Available modes:
+        // DEFAULT = normal backend order
+        // OLDEST  = Java Insertion Sort
+        // NEWEST  = reverse Java Insertion Sort result
+        let sortMode = "DEFAULT";
+
+        // Available filters:
+        // ALL, ACTIVE, CANCELLED
+        let currentFilter = "ALL";
+
+        // HTML ELEMENTS
+        const elements = {
+            tableBody: document.getElementById("registrations-table-body"),
+            search: document.getElementById("registration-search"),
+            sortDescription: document.getElementById("sort-description"),
+            tableHeading: document.getElementById("table-heading"),
+            total: document.getElementById("total-registrations"),
+            active: document.getElementById("active-registrations"),
+            cancelled: document.getElementById("cancelled-registrations"),
+            displayed: document.getElementById("table-summary"),
+            dialog: document.getElementById("registration-dialog"),
+            form: document.getElementById("registration-form"),
+            studentSelect: document.getElementById("student-select"),
+            courseSelect: document.getElementById("course-select"),
+            formError: document.getElementById("form-error"),
+            saveButton: document.getElementById("save-registration-button"),
+            toast: document.getElementById("toast")
+        };
+
+        // API REQUEST
+        async function api(url, options = {}) {
+            const response = await fetch(url, {
+                credentials: "same-origin",
+                ...options,
+                headers: {
+                    ...(options.body ? { "Content-Type": "application/json" } : {}),
+                    ...(options.headers || {})
+                }
+            });
+
+            const raw = response.status === 204 ? "" : await response.text();
+            let body = null;
+            if (raw) {
+                try {
+                    body = JSON.parse(raw);
+                } catch {
+                    body = { error: raw };
+                }
+            }
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    window.location.replace("/");
+                }
+                throw new Error(
+                    body && body.error ? body.error : `Request failed (${response.status})`
+                );
+            }
+            return body;
+        }
+
+        // ESCAPE HTML
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[character]);
+        }
+
+        // TOAST MESSAGES
+        let toastTimer;
+        function showToast(message, isError = false) {
+            elements.toast.textContent = message;
+            elements.toast.classList.toggle("error", isError);
+            elements.toast.classList.add("show");
+            window.clearTimeout(toastTimer);
+            toastTimer = window.setTimeout(() => {
+                elements.toast.classList.remove("show");
+            }, 3500);
+        }
+
+        // DATE FORMATTING
+        function formatDate(value) {
+            let date;
+            if (Array.isArray(value)) {
+                const [
+                    year, month, day,
+                    hour = 0, minute = 0,
+                    second = 0, nanos = 0
+                ] = value;
+                date = new Date(
+                    year,
+                    month - 1,
+                    day,
+                    hour,
+                    minute,
+                    second,
+                    Math.floor(nanos / 1000000)
+                );
+            } else {
+                date = new Date(value);
+            }
+
+            if (Number.isNaN(date.getTime())) {
+                return "Date unavailable";
+            }
+            return date.toLocaleString();
+        }
+
+        // STUDENT NAME
+        function getStudentName(studentId) {
+            const student = students.find(student =>
+                String(student.studentId).toLowerCase() === String(studentId).toLowerCase()
+            );
+            return student ? student.name || student.fullName || studentId : studentId;
+        }
+
+        // COURSE TITLE
+        function getCourseTitle(courseCode) {
+            const course = courses.find(course =>
+                String(course.courseCode).toLowerCase() === String(courseCode).toLowerCase()
+            );
+            return course ? course.title || courseCode : courseCode;
+        }
+
+        // GET FILTERED REGISTRATIONS
+        function getFilteredRegistrations() {
+            let filtered = registrations;
+
+            // Filter by registration status
+            if (currentFilter !== "ALL") {
+                filtered = filtered.filter(registration =>
+                    String(registration.status).toUpperCase() === currentFilter
+                );
+            }
+
+            // Search registrations
+            const query = elements.search.value.trim().toLowerCase();
+            if (query) {
+                filtered = filtered.filter(registration => {
+                    const studentName = getStudentName(registration.studentId);
+                    const courseTitle = getCourseTitle(registration.courseCode);
+                    return [
+                        registration.registrationId,
+                        registration.studentId,
+                        studentName,
+                        registration.courseCode,
+                        courseTitle,
+                        registration.status
+                    ].some(value =>
+                        String(value ?? "").toLowerCase().includes(query)
+                    );
+                });
+            }
+
+            return filtered;
+        }
+
+        // UPDATE STATISTICS
+        function updateStatistics() {
+            const activeCount = registrations.filter(registration =>
+                String(registration.status).toUpperCase() === "ACTIVE"
+            ).length;
+
+            const cancelledCount = registrations.filter(registration =>
+                String(registration.status).toUpperCase() === "CANCELLED"
+            ).length;
+
+            elements.total.textContent = registrations.length;
+            elements.active.textContent = activeCount;
+            elements.cancelled.textContent = cancelledCount;
+        }
+
+        // UPDATE BUTTON APPEARANCE
+        function updateControls() {
+            // Update filter buttons
+            document.querySelectorAll("[data-filter]").forEach(button => {
+                button.classList.toggle("active", button.dataset.filter === currentFilter);
+            });
+
+            // Update sorting buttons
+            document.querySelectorAll("[data-sort]").forEach(button => {
+                button.classList.toggle("active", button.dataset.sort === sortMode);
+            });
+
+            // Update table heading
+            const headings = {
+                ALL: "All registrations",
+                ACTIVE: "Active registrations",
+                CANCELLED: "Cancelled registrations"
+            };
+            elements.tableHeading.textContent = headings[currentFilter];
+
+            // Update description
+            if (sortMode === "DEFAULT") {
+                elements.sortDescription.textContent =
+                    "Displaying registrations in the default backend order.";
+            } else if (sortMode === "OLDEST") {
+                elements.sortDescription.textContent =
+                    "Sorted oldest to newest using Java Insertion Sort.";
+            } else {
+                elements.sortDescription.textContent =
+                    "Sorted newest to oldest using reversed Java Insertion Sort results.";
+            }
+        }
+
+        // RENDER TABLE
+        function render() {
+            const filtered = getFilteredRegistrations();
+            updateStatistics();
+            updateControls();
+
+            elements.displayed.textContent =
+                `Showing ${filtered.length} of ${registrations.length} registrations`;
+
+            if (filtered.length === 0) {
+                let message;
+                if (elements.search.value.trim()) {
+                    message = "No registrations match your search.";
+                } else if (currentFilter === "ACTIVE") {
+                    message = "No active registrations available.";
+                } else if (currentFilter === "CANCELLED") {
+                    message = "No cancelled registrations available.";
+                } else {
+                    message = "No registrations available yet.";
+                }
+
+                elements.tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="table-message">
+                        ${message}
+                    </td>
+                </tr>
+                `;
+                return;
+            }
+
+            elements.tableBody.innerHTML = filtered.map(registration => {
+                const id = escapeHtml(registration.registrationId);
+                const studentId = escapeHtml(registration.studentId);
+                const studentName = escapeHtml(getStudentName(registration.studentId));
+                const courseCode = escapeHtml(registration.courseCode);
+                const courseTitle = escapeHtml(getCourseTitle(registration.courseCode));
+                const date = escapeHtml(formatDate(registration.registrationDateTime));
+                const status = String(registration.status ?? "").toUpperCase();
+                const statusClass = status === "ACTIVE" ? "status-active" : "status-cancelled";
+
+                return `
+                <tr>
+                    <td>
+                        <span class="registration-id">${id}</span>
+                    </td>
+                    <td>
+                        <div class="student-cell">
+                            <span class="student-initials" aria-hidden="true">${escapeHtml(studentName.charAt(0))}</span>
+                            <div class="student-name">
+                                <strong>${studentName}</strong>
+                                <span>${studentId}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="student-name">
+                            <strong>${courseTitle}</strong>
+                            <span><span class="id-chip">${courseCode}</span></span>
+                        </div>
+                    </td>
+                    <td>${date}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${escapeHtml(status)}
+                        </span>
+                    </td>
+                    <td class="action-cell">
+                        <span class="table-actions">
+                            <select
+                                class="status-select"
+                                data-action="status"
+                                data-id="${id}"
+                                aria-label="Change registration status">
+                                <option value="ACTIVE" ${status === "ACTIVE" ? "selected" : ""}>
+                                    Active
+                                </option>
+                                <option value="CANCELLED" ${status === "CANCELLED" ? "selected" : ""}>
+                                    Cancelled
+                                </option>
+                            </select>
+
+                            <button
+                                class="action-button delete"
+                                type="button"
+                                data-action="delete"
+                                data-id="${id}"
+                                title="Delete registration">
+                                ⌫
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+                `;
+            }).join("");
+        }
+
+        // LOAD REGISTRATIONS
+        async function loadRegistrations() {
+            elements.tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="table-message">
+                    Loading registrations...
+                </td>
+            </tr>
+            `;
+
+            try {
+                let endpoint;
+                if (sortMode === "DEFAULT") {
+                    endpoint = REGISTRATION_API;
+                } else {
+                    endpoint = `${REGISTRATION_API}/sorted-by-time`;
+                }
+
+                const data = await api(endpoint);
+                if (!Array.isArray(data)) {
+                    throw new Error("Unexpected registration data received.");
+                }
+
+                registrations = data;
+                if (sortMode === "NEWEST") {
+                    registrations.reverse();
+                }
+
+                render();
+            } catch (error) {
+                elements.tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="table-message">
+                        Could not load registrations. ${escapeHtml(error.message)}
+                    </td>
+                </tr>
+                `;
+                elements.total.textContent = "—";
+                elements.active.textContent = "—";
+                elements.cancelled.textContent = "—";
+                elements.displayed.textContent = "Could not load registrations.";
+                showToast(error.message, true);
+            }
+        }
+
+        // CHANGE SORT MODE
+        async function changeSortMode(newMode) {
+            if (sortMode === newMode) return;
+            sortMode = newMode;
+            setControlsDisabled(true);
+            try {
+                await loadRegistrations();
+            } finally {
+                setControlsDisabled(false);
+            }
+        }
+
+        // CHANGE FILTER
+        function changeFilter(newFilter) {
+            currentFilter = newFilter;
+            render();
+        }
+
+        // DISABLE CONTROLS WHILE LOADING
+        function setControlsDisabled(disabled) {
+            document.querySelectorAll("[data-filter], [data-sort]").forEach(button => {
+                button.disabled = disabled;
+            });
+        }
+
+        // LOAD STUDENTS AND COURSES
+        async function loadFormData() {
+            const [studentData, courseData] = await Promise.all([
+                api(STUDENT_API),
+                api(COURSE_API)
+            ]);
+
+            students = Array.isArray(studentData) ? studentData : [];
+            courses = Array.isArray(courseData) ? courseData : [];
+
+            elements.studentSelect.innerHTML = '<option value="">Choose a student...</option>';
+            students.forEach(student => {
+                const option = document.createElement("option");
+                option.value = student.studentId;
+                const name = student.name || student.fullName || "Student";
+                option.textContent = `${student.studentId} - ${name}`;
+                elements.studentSelect.appendChild(option);
+            });
+
+            elements.courseSelect.innerHTML = '<option value="">Choose a course...</option>';
+            courses.forEach(course => {
+                const option = document.createElement("option");
+                option.value = course.courseCode;
+                option.textContent = `${course.courseCode} - ${course.title}`;
+                elements.courseSelect.appendChild(option);
+            });
+        }
+
+        // OPEN DIALOG
+        async function openDialog() {
+            elements.form.reset();
+            elements.formError.hidden = true;
+            elements.formError.textContent = "";
+            elements.saveButton.disabled = true;
+            elements.dialog.showModal();
+
+            try {
+                await loadFormData();
+            } catch (error) {
+                elements.formError.textContent = error.message;
+                elements.formError.hidden = false;
+            } finally {
+                elements.saveButton.disabled = false;
+            }
+        }
+
+        // CLOSE DIALOG
+        function closeDialog() {
+            elements.dialog.close();
+        }
+
+        // CREATE REGISTRATION
+        async function saveRegistration(event) {
+            event.preventDefault();
+            elements.formError.hidden = true;
+
+            if (!elements.form.reportValidity()) return;
+
+            const studentId = elements.studentSelect.value;
+            const courseCode = elements.courseSelect.value;
+
+            elements.saveButton.disabled = true;
+            elements.saveButton.textContent = "Creating...";
+
+            try {
+                await api(REGISTRATION_API, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        studentId: studentId,
+                        courseCode: courseCode
+                    })
+                });
+
+                closeDialog();
+                showToast("Registration created successfully.");
+                await loadRegistrations();
+            } catch (error) {
+                const msg = error.message || "";
+                // If course is full (backend returns "Course is full. Waiting-list integration will be added later."),
+                // seamlessly route the student to the waitlist via /api/queue/admin
+                if (msg.includes("Course is full") || msg.includes("Waiting-list") || msg.includes("waiting-list")) {
+                    try {
+                        elements.saveButton.textContent = "Adding to waitlist...";
+                        const entry = await api("/api/queue/admin", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                studentId: studentId,
+                                courseCode: courseCode
+                            })
+                        });
+
+                        closeDialog();
+                        const pos = (entry && typeof entry.position !== "undefined") ? ` at position #${entry.position}` : "";
+                        showToast(`Course ${courseCode} is full. Student ${studentId} was placed on the waiting list${pos}.`);
+                        await loadRegistrations();
+                        return;
+                    } catch (queueError) {
+                        elements.formError.textContent = `Course is full. Waitlist error: ${queueError.message}`;
+                        elements.formError.hidden = false;
+                        return;
+                    }
+                }
+
+                elements.formError.textContent = error.message;
+                elements.formError.hidden = false;
+            } finally {
+                elements.saveButton.disabled = false;
+                elements.saveButton.textContent = "Create registration";
+            }
+        }
+
+        // CHANGE REGISTRATION STATUS
+        async function changeStatus(registrationId, newStatus, selectElement) {
+            const registration = registrations.find(item => item.registrationId === registrationId);
+            if (!registration) return;
+
+            const oldStatus = registration.status;
+            if (oldStatus === newStatus) return;
+
+            const confirmed = window.confirm(
+                `Change registration status from ${oldStatus} to ${newStatus}?`
+            );
+
+            if (!confirmed) {
+                selectElement.value = oldStatus;
+                return;
+            }
+
+            selectElement.disabled = true;
+
+            try {
+                await api(
+                    `${REGISTRATION_API}/${encodeURIComponent(registrationId)}/status`,
+                    {
+                        method: "PUT",
+                        body: JSON.stringify({ status: newStatus })
+                    }
+                );
+
+                showToast("Registration status updated successfully.");
+                await loadRegistrations();
+            } catch (error) {
+                selectElement.value = oldStatus;
+                selectElement.disabled = false;
+                showToast(error.message, true);
+            }
+        }
+
+        // DELETE REGISTRATION
+        async function deleteRegistration(registrationId) {
+            const confirmed = window.confirm(
+                "Are you sure you want to permanently delete this registration?"
+            );
+            if (!confirmed) return;
+
+            try {
+                await api(
+                    `${REGISTRATION_API}/${encodeURIComponent(registrationId)}`,
+                    { method: "DELETE" }
+                );
+
+                showToast("Registration deleted successfully.");
+                await loadRegistrations();
+            } catch (error) {
+                showToast(error.message, true);
+            }
+        }
+
+        // CHECK ADMIN LOGIN
+        async function initialize() {
+            try {
+                const account = await api("/api/auth/me");
+                if (account.role !== "ADMIN") {
+                    window.location.replace("/");
+                    return;
+                }
+
+                const results = await Promise.allSettled([
+                    api(STUDENT_API),
+                    api(COURSE_API)
+                ]);
+
+                if (results[0].status === "fulfilled" && Array.isArray(results[0].value)) {
+                    students = results[0].value;
+                }
+
+                if (results[1].status === "fulfilled" && Array.isArray(results[1].value)) {
+                    courses = results[1].value;
+                }
+
+                await loadRegistrations();
+            } catch (error) {
+                console.error(error);
+                window.location.replace("/");
+            }
+        }
+
+        // EVENT LISTENERS
+        document.getElementById("add-registration-button").addEventListener("click", openDialog);
+        document.getElementById("close-dialog-button").addEventListener("click", closeDialog);
+        document.getElementById("cancel-dialog-button").addEventListener("click", closeDialog);
+        elements.form.addEventListener("submit", saveRegistration);
+        elements.search.addEventListener("input", render);
+
+        // Filter buttons
+        document.querySelectorAll("[data-filter]").forEach(button => {
+            button.addEventListener("click", () => {
+                changeFilter(button.dataset.filter);
+            });
+        });
+
+        // Sorting buttons
+        document.querySelectorAll("[data-sort]").forEach(button => {
+            button.addEventListener("click", () => {
+                changeSortMode(button.dataset.sort);
+            });
+        });
+
+        // Refresh
+        document.getElementById("refresh-button").addEventListener("click", loadRegistrations);
+
+        // Table status changes
+        elements.tableBody.addEventListener("change", event => {
+            const select = event.target.closest('[data-action="status"]');
+            if (!select) return;
+            changeStatus(select.dataset.id, select.value, select);
+        });
+
+        // Table delete buttons
+        elements.tableBody.addEventListener("click", event => {
+            const button = event.target.closest('[data-action="delete"]');
+            if (!button) return;
+            deleteRegistration(button.dataset.id);
+        });
+
+        // Admin logout
+        const handleLogout = async () => {
+            try {
+                await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+            } catch (e) {
+                console.error(e);
+            } finally {
+                window.location.replace("/");
+            }
+        };
+        document.getElementById("admin-logout-btn")?.addEventListener("click", handleLogout);
+        document.getElementById("sidebar-logout-btn")?.addEventListener("click", handleLogout);
+
+        // START PAGE
+        initialize();
+    })();
+</script>
+
+</body>
+</html>
