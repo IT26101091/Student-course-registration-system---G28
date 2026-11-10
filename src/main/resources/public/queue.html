@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
+  <title>Waiting Queue | CourseHub</title>
+  <link rel="stylesheet" href="/css/students.css">
+  <link rel="stylesheet" href="/css/queue.css">
+</head>
+<body>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="CourseHub home">
+      <span class="brand-mark">C</span>
+      <span>CourseHub</span>
+    </a>
+
+    <p class="nav-label">WORKSPACE</p>
+    <nav class="side-nav" aria-label="Admin navigation">
+      <a class="nav-item" href="/">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>Home</span>
+      </a>
+      <a class="nav-item" href="/students.html">
+        <span class="nav-icon" aria-hidden="true">♙</span>
+        <span>Students</span>
+      </a>
+      <a class="nav-item" href="/courses.html">
+        <span class="nav-icon" aria-hidden="true">▤</span>
+        <span>Courses</span>
+      </a>
+      <a class="nav-item" href="/registrations.html">
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>Registrations</span>
+      </a>
+      <a class="nav-item active" href="/queue.html" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">◷</span>
+        <span>Waiting queue</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="team-mark">CH</div>
+      <div class="team-copy">
+        <strong>CourseHub Admin</strong>
+        <span>University Workspace</span>
+      </div>
+      <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button" title="Sign out">
+        <span aria-hidden="true">↪</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="topbar">
+      <div class="breadcrumbs">
+        <a href="/">Home</a>
+        <span>/</span>
+        <span>Waiting queue</span>
+      </div>
+      <div class="topbar-right">
+        <span class="connection-pill">
+          <span class="connection-dot"></span>
+          Java server active
+        </span>
+        <div class="avatar" title="Administrator">A</div>
+        <button class="admin-logout-btn" id="admin-logout-btn" type="button" title="Sign out of Admin Portal">
+          <span class="admin-logout-icon" aria-hidden="true">↪</span>
+          <span>Sign out</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow">ADMINISTRATION</p>
+        <h1>Waiting queue</h1>
+        <p class="page-description">
+          Monitor course waiting queues in first-in, first-out (FIFO) order when enrollment limits are reached.
+        </p>
+      </div>
+      <button class="button button-subtle" id="refresh-queue" type="button">
+        <span aria-hidden="true">↻</span> Refresh queue
+      </button>
+    </section>
+
+    <!-- Queue Panel -->
+    <section class="queue-panel">
+      <div class="queue-panel-heading">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?auto=format&fit=crop&w=120&q=80"
+               alt="Waiting list"
+               style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line);"
+               onerror="this.style.display='none';">
+          <div>
+            <h2>Course Waitlist Viewer</h2>
+            <p>Select any course to view its live FIFO waiting list and student positions.</p>
+          </div>
+        </div>
+      </div>
+
+      <label class="queue-field" for="course-select">Select Course</label>
+      <div class="queue-controls">
+        <select id="course-select">
+          <option value="">Loading courses...</option>
+        </select>
+        <button class="button button-primary" id="load-queue" type="button">
+          View queue
+        </button>
+      </div>
+
+      <p class="queue-message" id="queue-message" role="status">Choose a course above to inspect its queue.</p>
+
+      <div class="queue-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">POSITION</th>
+              <th scope="col">STUDENT ID</th>
+              <th scope="col">QUEUE REQUEST TIME</th>
+              <th scope="col">QUEUE STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="queue-table-body">
+            <tr>
+              <td colspan="4" class="table-message">Select a course to view waiting students.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="queue-footer">
+        <span id="queue-count">—</span>
+        <span>FIFO Queue Order: Earliest requests prioritized</span>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>CourseHub · Student Course Registration System</span>
+      <span>Java OOP Group Project</span>
+    </footer>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/js/queue.js" defer></script>
+<script>
+  function setupAdminLogout() {
+    const handleLogout = async () => {
+      try {
+        await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        window.location.replace("/");
+      }
+    };
+    document.getElementById("admin-logout-btn")?.addEventListener("click", handleLogout);
+    document.getElementById("sidebar-logout-btn")?.addEventListener("click", handleLogout);
+  }
+  setupAdminLogout();
+</script>
+</body>
+</html>
