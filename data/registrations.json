@@ -1,1 +1,49 @@
-[]
+[ {
+  "registrationId" : "REG-6793c583-6b7e-4f18-ac19-0378d42fe4ae",
+  "studentId" : "STU001",
+  "courseCode" : "TEST01",
+  "registrationDateTime" : "2026-11-09T12:52:33.6002368",
+  "status" : "CANCELLED"
+}, {
+  "registrationId" : "REG-f3e7654c-4361-4f05-844f-5fa6216a4a6b",
+  "studentId" : "STU002",
+  "courseCode" : "TEST01",
+  "registrationDateTime" : "2026-11-09T13:19:13.4361335",
+  "status" : "CANCELLED"
+}, {
+  "registrationId" : "REG-03df2f35-2584-4b6e-894f-b55a6fce69f1",
+  "studentId" : "STU003",
+  "courseCode" : "TEST01",
+  "registrationDateTime" : "2026-11-09T13:28:46.6126256",
+  "status" : "CANCELLED"
+}, {
+  "registrationId" : "REG-c2819e4d-3491-4320-879b-b3469f8b14a7",
+  "studentId" : "STU001",
+  "courseCode" : "TEST01",
+  "registrationDateTime" : "2026-11-09T14:45:54.8080986",
+  "status" : "CANCELLED"
+}, {
+  "registrationId" : "REG-051412d9-a697-46e9-a6bf-bd3cf035b35e",
+  "studentId" : "STU002",
+  "courseCode" : "TEST01",
+  "registrationDateTime" : "2026-11-09T20:14:42.8043976",
+  "status" : "CANCELLED"
+}, {
+  "registrationId" : "REG-d5faf1fa-a920-4e61-823d-aecdd0bdf5a2",
+  "studentId" : "STU001",
+  "courseCode" : "TEST01",
+  "registrationDateTime" : "2026-11-09T21:28:43.8097289",
+  "status" : "CANCELLED"
+}, {
+  "registrationId" : "REG-1b0c988a-1861-4b74-a1b2-53d9526b6a4c",
+  "studentId" : "STU002",
+  "courseCode" : "TEST01",
+  "registrationDateTime" : "2026-11-09T21:29:26.5986382",
+  "status" : "ACTIVE"
+}, {
+  "registrationId" : "REG-00795b20-50b9-454f-9a81-9d9000c0d486",
+  "studentId" : "STU001",
+  "courseCode" : "IE1011",
+  "registrationDateTime" : "2026-11-09T23:51:47.0589412",
+  "status" : "ACTIVE"
+} ]

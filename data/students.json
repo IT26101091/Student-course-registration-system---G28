@@ -1,11 +1,21 @@
 [ {
-  "name" : "binara",
-  "email" : "it26101091@my.sliit.lk",
+  "name" : "FIRST",
+  "email" : "binarabandara2005@gmail.com",
   "studentId" : "STU001",
-  "degreeProgram" : "DSA"
+  "degreeProgram" : "COMPUTING"
 }, {
-  "name" : "AMAL PERERA",
-  "email" : "binara0928@gmail.com",
+  "name" : "SECOND",
+  "email" : "it26101091@my.sliit.lk",
   "studentId" : "STU002",
-  "degreeProgram" : "DSA"
+  "degreeProgram" : "COMPUTING"
+}, {
+  "name" : "THIRD",
+  "email" : "binara0928@gmail.com",
+  "studentId" : "STU003",
+  "degreeProgram" : "COMPUTING"
+}, {
+  "name" : "FOURTH",
+  "email" : "vfcdx@dd.fd",
+  "studentId" : "STU004",
+  "degreeProgram" : "COMPUTING"
 } ]
