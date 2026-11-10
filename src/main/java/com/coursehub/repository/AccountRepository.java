@@ -183,6 +183,29 @@ public class AccountRepository {
         return removed;
     }
 
+
+    // Delete an account using its permanent student ID.
+    public synchronized boolean deleteByStudentId(String studentId) {
+
+        if (studentId == null || studentId.isBlank()) {
+            return false;
+        }
+
+        List<Account> accounts = store.readAll();
+
+        boolean removed = accounts.removeIf(account ->
+                account.getStudentId() != null
+                        && account.getStudentId().equalsIgnoreCase(
+                        studentId.trim()));
+
+        if (removed) {
+            store.writeAll(accounts);
+        }
+
+        return removed;
+    }
+
+
     private void validateAccount(Account account) {
 
         if (account == null) {

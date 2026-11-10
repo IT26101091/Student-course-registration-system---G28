@@ -3,130 +3,937 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
   <title>Student Dashboard | CourseHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/student-register.css">
+
   <style>
-    :root { color-scheme: light; --blue:#245ce6; --ink:#172b4d; --muted:#64748b; --line:#e2e8f0; --bg:#f1f5fb; }
-    * { box-sizing:border-box; }
-    body { margin:0; background:var(--bg); color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
-    header { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px max(22px,calc((100% - 1080px)/2)); background:#fff; border-bottom:1px solid var(--line); }
-    .brand { color:var(--blue); font-size:22px; font-weight:800; text-decoration:none; }
-    .userbar { display:flex; align-items:center; gap:14px; color:var(--muted); font-size:14px; }
-    button { border:0; border-radius:9px; padding:11px 15px; font-weight:700; cursor:pointer; }
-    .primary { background:var(--blue); color:white; }
-    .secondary { background:#eaf0ff; color:var(--blue); }
-    button:disabled { opacity:.65; cursor:wait; }
-    main { max-width:1080px; padding:32px 22px 44px; margin:auto; }
-    h1 { margin:4px 0 10px; font-size:30px; }
-    h2 { margin:8px 0 14px; font-size:20px; }
-    p { line-height:1.55; }
-    .muted { color:var(--muted); }
-    .eyebrow { color:var(--blue); font-size:12px; font-weight:800; letter-spacing:1.3px; margin:0; }
-    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:24px; }
-    .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:24px; box-shadow:0 7px 25px rgba(30,50,80,.045); margin-bottom:18px; }
-    dl { margin:0; }
-    dl div { display:grid; grid-template-columns:minmax(120px, .8fr) 1.2fr; gap:12px; padding:12px 0; border-bottom:1px solid #edf1f6; }
-    dl div:last-child { border-bottom:0; }
-    dt { color:var(--muted); font-size:14px; }
-    dd { margin:0; font-weight:700; overflow-wrap:anywhere; }
-    label { display:block; margin:15px 0 7px; font-size:14px; font-weight:700; }
-    input { width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px; font-size:15px; }
-    input:focus { outline:2px solid #bed0ff; border-color:var(--blue); }
-    form button { margin-top:17px; }
-    .alert { margin:16px 0; border-radius:9px; padding:12px 14px; background:#fff1f1; color:#9f2525; line-height:1.5; }
-    .success { background:#ecfdf3; color:#17663a; }
-    .notice { background:#eff6ff; border:1px solid #dbeafe; border-radius:12px; padding:16px; line-height:1.55; }
-    footer { margin-top:22px; color:var(--muted); font-size:13px; text-align:center; }
-    [hidden] { display:none !important; }
-    @media (max-width:720px) { .grid { grid-template-columns:1fr; } header { align-items:flex-start; } .userbar { flex-direction:column; align-items:flex-end; } h1 { font-size:25px; } .card { padding:19px; } }
+    :root {
+      color-scheme: light;
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --blue: #4f46e5;
+      --blue-light: #6366f1;
+      --blue-hover: #4338ca;
+      --blue-soft: #eef2ff;
+      --blue-border: #c7d2fe;
+      --ink: #0f172a;
+      --ink-secondary: #334155;
+      --muted: #64748b;
+      --muted-light: #94a3b8;
+      --line: #e2e8f0;
+      --line-subtle: #f8fafc;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --green: #10b981;
+      --green-dark: #047857;
+      --green-soft: #ecfdf5;
+      --green-border: #a7f3d0;
+      --danger: #ef4444;
+      --danger-dark: #b91c1c;
+      --danger-soft: #fef2f2;
+      --danger-border: #fecaca;
+      --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.07);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-full: 9999px;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-main);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Topbar Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px clamp(24px, 5vw, 64px);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      background: var(--gradient-primary);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+    }
+
+    .userbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    #signed-in-as {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      background: var(--line-subtle);
+      border: 1px solid var(--line);
+      padding: 7px 16px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-avatar-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--blue-soft);
+      color: var(--blue);
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 11px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .primary {
+      background: var(--gradient-primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+    }
+
+    .primary:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .secondary {
+      background: #ffffff;
+      color: var(--ink-secondary);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .secondary:hover {
+      background: var(--line-subtle);
+      color: var(--ink);
+      border-color: #cbd5e1;
+    }
+
+    .logout-btn-header {
+      background: #ffffff;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .logout-btn-header:hover {
+      background: var(--danger-soft);
+      color: var(--danger-dark);
+      border-color: var(--danger-border);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1140px;
+      padding: 28px 24px 60px;
+      margin: auto;
+    }
+
+    /* Hero Campus Banner */
+    .dashboard-hero-banner {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      background: #0f172a;
+      min-height: 190px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .banner-img-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.35;
+      filter: saturate(1.2);
+    }
+
+    .banner-gradient-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.85) 100%);
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 10;
+      padding: 24px 28px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .banner-title-area {
+      color: #ffffff;
+    }
+
+    .banner-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+    }
+
+    .banner-content h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .banner-content h1 #welcome-name {
+      color: #38bdf8;
+    }
+
+    .banner-desc {
+      color: #cbd5e1;
+      font-size: 13.5px;
+      margin-top: 4px;
+    }
+
+    .banner-badge {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      color: #ffffff;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .banner-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       Tabs Navigation (Just like Admin Dashboard)
+       ═══════════════════════════════════════════════════════════ */
+    .dashboard-tabs {
+      display: flex;
+      gap: 8px;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-button {
+      flex: 1;
+      min-width: 150px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .tab-button:hover {
+      color: var(--ink);
+      background: var(--line-subtle);
+    }
+
+    .tab-button.active {
+      color: #ffffff;
+      background: var(--gradient-primary);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+    }
+
+    .tab-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .tab-panel {
+      display: none;
+      animation: tab-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes tab-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Card Layouts */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: #cbd5e1;
+    }
+
+    /* Card Visual Header with Image */
+    .card-visual-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-thumb-img {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--line);
+    }
+
+    .card-visual-text h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .card-visual-text p {
+      margin: 3px 0 0;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    /* Definition List (Profile) */
+    dl {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+
+    dl div {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 16px;
+      padding: 12px 16px;
+      background: var(--line-subtle);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      align-items: center;
+    }
+
+    dt {
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    dd {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+    }
+
+    #profile-id {
+      font-family: var(--font-mono);
+      color: var(--blue);
+    }
+
+    /* Forms & Inputs */
+    label {
+      display: block;
+      margin: 16px 0 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-secondary);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      color: var(--ink);
+      background: #ffffff;
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    form button {
+      margin-top: 18px;
+    }
+
+    /* Alerts */
+    .alert {
+      margin: 16px 0 0;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      background: var(--danger-soft);
+      border: 1px solid var(--danger-border);
+      color: var(--danger-dark);
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .success {
+      background: var(--green-soft);
+      border-color: var(--green-border);
+      color: var(--green-dark);
+    }
+
+    /* Queue Controls */
+    .queue-student-card {
+      margin-top: 0;
+    }
+
+    .queue-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    /* Separators */
+    hr {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 24px 0 20px;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted-light);
+      font-size: 12.5px;
+      text-align: center;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+      header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .userbar { width: 100%; justify-content: space-between; }
+      .dashboard-hero-banner { min-height: 160px; }
+      .banner-content h1 { font-size: 22px; }
+      .card { padding: 20px; }
+      dl div { grid-template-columns: 1fr; gap: 4px; }
+    }
   </style>
 </head>
 <body>
+  <!-- Top Navigation Header -->
   <header>
-    <a class="brand" href="/student-dashboard.html">CourseHub</a>
-    <div class="userbar"><span id="signed-in-as">Checking account…</span><button class="secondary" id="logout-button" type="button">Sign out</button></div>
+    <a class="brand" href="/student-dashboard.html" aria-label="CourseHub Dashboard">
+      <div class="brand-mark">C</div>
+      <span>CourseHub</span>
+    </a>
+    <div class="userbar">
+      <span id="signed-in-as">
+        <span class="user-avatar-circle" aria-hidden="true">S</span>
+        Checking account…
+      </span>
+      <button class="logout-btn-header" id="logout-button" type="button" title="Sign out of student account">
+        <span aria-hidden="true">↪</span> Sign out
+      </button>
+    </div>
   </header>
 
   <main>
+    <!-- First Login Password Change Card -->
     <section id="first-login-card" class="card" hidden>
       <p class="eyebrow">ACCOUNT SECURITY</p>
       <h1>Set your own password</h1>
-      <p class="muted">Your account still uses a temporary password. Change it to continue to your Student Dashboard.</p>
+      <p class="muted">Your account was created with a temporary password. Update it now to unlock your Student Dashboard.</p>
       <form id="first-password-form">
         <label for="first-current-password">Temporary password</label>
         <input id="first-current-password" type="password" autocomplete="current-password" required>
+
         <label for="first-new-password">New password (at least 8 characters)</label>
         <input id="first-new-password" type="password" minlength="8" autocomplete="new-password" required>
+
         <label for="first-confirm-password">Confirm new password</label>
         <input id="first-confirm-password" type="password" minlength="8" autocomplete="new-password" required>
-        <button class="primary" id="first-password-button" type="submit">Change password</button>
+
+        <button class="primary" id="first-password-button" type="submit">Update password & proceed</button>
       </form>
       <p id="first-message" class="alert" role="alert" hidden></p>
     </section>
 
+    <!-- Main Dashboard Content -->
     <section id="dashboard-content" hidden>
-      <p class="eyebrow">STUDENT WORKSPACE</p>
-      <h1>Welcome, <span id="welcome-name">Student</span>.</h1>
-      <p class="muted">View your profile and manage your CourseHub login details.</p>
-
-      <div class="grid">
-        <section class="card">
-          <p class="eyebrow">YOUR PROFILE</p>
-          <h2>Student details</h2>
-          <dl>
-            <div><dt>Full name</dt><dd id="profile-name">—</dd></div>
-            <div><dt>Student ID</dt><dd id="profile-id">—</dd></div>
-            <div><dt>Email</dt><dd id="profile-email">—</dd></div>
-            <div><dt>Degree programme</dt><dd id="profile-degree">—</dd></div>
-          </dl>
-          <p class="muted">Your permanent student ID stays the same even if you change your login username.</p>
-          <p id="profile-message" class="alert" role="alert" hidden></p>
-        </section>
-
-        <section class="card">
-          <p class="eyebrow">COURSE REGISTRATION</p>
-          <h2>Your courses</h2>
-          <div class="notice">Course registration has not been connected to this dashboard yet. We will connect the existing course and registration endpoints in the next step, so you can join and drop courses here.</div>
-        </section>
+      
+      <!-- Hero Welcome Banner with Campus Picture -->
+      <div class="dashboard-hero-banner">
+        <img class="banner-img-bg"
+             src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80"
+             alt="University Campus"
+             onerror="this.style.display='none';">
+        <div class="banner-gradient-overlay"></div>
+        <div class="banner-content">
+          <div class="banner-title-area">
+            <span class="banner-eyebrow">🎓 Student Academic Portal</span>
+            <h1>Welcome, <span id="welcome-name">Student</span> 👋</h1>
+            <p class="banner-desc">Manage your course registrations, waitlists, and academic profile.</p>
+          </div>
+          <div class="banner-badge">
+            <span class="banner-dot"></span>
+            Academic Term 2026/2027
+          </div>
+        </div>
       </div>
 
-      <div class="grid">
-        <section class="card">
-          <p class="eyebrow">ACCOUNT SECURITY</p>
-          <h2>Change username</h2>
-          <form id="username-form">
-            <label for="current-password-username">Current password</label>
-            <input id="current-password-username" type="password" autocomplete="current-password" required>
-            <label for="new-username">New username</label>
-            <input id="new-username" type="text" minlength="3" maxlength="40" pattern="[A-Za-z0-9._-]{3,40}" autocomplete="username" required>
-            <p class="muted">Use 3–40 letters, numbers, dots, underscores or hyphens.</p>
-            <button class="primary" id="username-button" type="submit">Save username</button>
-          </form>
-          <p id="username-message" class="alert" role="status" hidden></p>
-        </section>
+      <!-- Navigation Tabs (like Admin Dashboard) -->
+      <nav class="dashboard-tabs" aria-label="Student sections">
+        <button class="tab-button active" data-tab="tab-overview" type="button">
+          <span class="tab-icon" aria-hidden="true">♙</span>
+          <span>My Profile</span>
+        </button>
 
-        <section class="card">
-          <p class="eyebrow">ACCOUNT SECURITY</p>
-          <h2>Change password</h2>
-          <form id="password-form">
-            <label for="current-password">Current password</label>
-            <input id="current-password" type="password" autocomplete="current-password" required>
-            <label for="new-password">New password (at least 8 characters)</label>
-            <input id="new-password" type="password" minlength="8" autocomplete="new-password" required>
-            <label for="confirm-password">Confirm new password</label>
-            <input id="confirm-password" type="password" minlength="8" autocomplete="new-password" required>
-            <button class="primary" id="password-button" type="submit">Save password</button>
-          </form>
-          <p id="password-message" class="alert" role="status" hidden></p>
-        </section>
+        <button class="tab-button" data-tab="tab-courses" type="button">
+          <span class="tab-icon" aria-hidden="true">▤</span>
+          <span>Course Registration</span>
+        </button>
+
+        <button class="tab-button" data-tab="tab-queue" type="button">
+          <span class="tab-icon" aria-hidden="true">◷</span>
+          <span>Waiting Queue</span>
+        </button>
+
+        <button class="tab-button" data-tab="tab-security" type="button">
+          <span class="tab-icon" aria-hidden="true">🔒</span>
+          <span>Account Security</span>
+        </button>
+      </nav>
+
+      <!-- TAB 1: Profile & Overview -->
+      <div class="tab-panel active" id="tab-overview">
+        <div class="grid">
+          <!-- Student Profile Card -->
+          <section class="card">
+            <div class="card-visual-header">
+              <img class="card-thumb-img"
+                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+                   alt="Student profile avatar"
+                   onerror="this.src=''; this.style.display='none';">
+              <div class="card-visual-text">
+                <h2>Student Profile</h2>
+                <p>Verified university enrollment record</p>
+              </div>
+            </div>
+
+            <dl>
+              <div>
+                <dt>Full name</dt>
+                <dd id="profile-name">—</dd>
+              </div>
+              <div>
+                <dt>Student ID</dt>
+                <dd id="profile-id">—</dd>
+              </div>
+              <div>
+                <dt>Email</dt>
+                <dd id="profile-email">—</dd>
+              </div>
+              <div>
+                <dt>Programme</dt>
+                <dd id="profile-degree">—</dd>
+              </div>
+            </dl>
+            <p class="muted">Your student ID is permanently linked to all your official university course enrollments.</p>
+            <p id="profile-message" class="alert" role="alert" hidden></p>
+          </section>
+
+          <!-- Quick Portal Guide Card -->
+          <section class="card">
+            <div class="card-visual-header">
+              <img class="card-thumb-img"
+                   src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=400&q=80"
+                   alt="Campus study group"
+                   onerror="this.src=''; this.style.display='none';">
+              <div class="card-visual-text">
+                <h2>Portal Overview</h2>
+                <p>Features available to you</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; font-weight: 800; flex-shrink: 0;">1</div>
+                <div>
+                  <strong style="display: block; font-size: 13.5px;">Register Courses</strong>
+                  <span style="color: var(--muted); font-size: 12.5px;">Select available curriculum courses and enroll instantly.</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--green-soft); color: var(--green-dark); display: grid; place-items: center; font-weight: 800; flex-shrink: 0;">2</div>
+                <div>
+                  <strong style="display: block; font-size: 13.5px;">Automated Waitlists</strong>
+                  <span style="color: var(--muted); font-size: 12.5px;">Full courses automatically place you in FIFO queue with auto-promotion.</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--danger-soft); color: var(--danger-dark); display: grid; place-items: center; font-weight: 800; flex-shrink: 0;">3</div>
+                <div>
+                  <strong style="display: block; font-size: 13.5px;">Manage Credentials</strong>
+                  <span style="color: var(--muted); font-size: 12.5px;">Update your login username and password at any time.</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
+
+      <!-- TAB 2: Course Registration -->
+      <div class="tab-panel" id="tab-courses">
+        <div class="grid">
+          <section class="card">
+            <div class="card-visual-header">
+              <img class="card-thumb-img"
+                   src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80"
+                   alt="Library books"
+                   onerror="this.src=''; this.style.display='none';">
+              <div class="card-visual-text">
+                <h2>Course Registration</h2>
+                <p>Enroll in curriculum courses or manage active enrollments</p>
+              </div>
+            </div>
+
+            <div class="registration-section">
+              <h3>Enroll in a Course</h3>
+              <p class="muted" style="margin-bottom: 12px;">Choose an available course from the curriculum.</p>
+              
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 14px;">
+                <select id="course-select" style="flex: 1; min-width: 260px;">
+                  <option value="">Loading courses...</option>
+                </select>
+
+                <button class="primary" id="join-course-btn" type="button" style="margin: 0; min-height: 44px;">
+                  <span>＋</span> Join Course
+                </button>
+              </div>
+
+              <p id="registration-message" class="alert" hidden></p>
+
+              <hr>
+
+              <h3>My Current Registrations</h3>
+              <div id="registration-list">
+                <p class="muted">Loading your registrations...</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Academic Policies Card (Fills the space beautifully!) -->
+          <section class="card">
+            <div class="card-visual-header">
+              <div style="width: 54px; height: 54px; border-radius: var(--radius-md); background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; font-size: 24px; flex-shrink: 0;">📋</div>
+              <div class="card-visual-text">
+                <h2>Registration Guidelines</h2>
+                <p>Important semester enrollment policies</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px; font-size: 14px; color: var(--ink-secondary);">
+              <div style="padding: 14px 16px; background: var(--line-subtle); border-radius: var(--radius-md); border-left: 4px solid var(--blue);">
+                <strong style="display: block; color: var(--ink); margin-bottom: 4px; font-size: 14.5px;">Credit Load Limits</strong>
+                Students are recommended to take 12 to 20 credits per academic term. Always balance core programming modules with electives.
+              </div>
+
+              <div style="padding: 14px 16px; background: var(--line-subtle); border-radius: var(--radius-md); border-left: 4px solid var(--green);">
+                <strong style="display: block; color: var(--ink); margin-bottom: 4px; font-size: 14.5px;">Course Dropping Policy</strong>
+                You may drop an active course at any time. Dropping immediately frees up a seat and triggers automatic promotion for students waiting in the queue.
+              </div>
+
+              <div style="padding: 14px 16px; background: var(--line-subtle); border-radius: var(--radius-md); border-left: 4px solid var(--amber);">
+                <strong style="display: block; color: var(--ink); margin-bottom: 4px; font-size: 14.5px;">Full Capacity Courses</strong>
+                When a course reaches maximum capacity, attempting to register will offer you an immediate spot on the waiting list.
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- TAB 3: Waiting Queue -->
+      <div class="tab-panel" id="tab-queue">
+        <div class="grid">
+          <section class="card queue-student-card">
+            <div class="card-visual-header">
+              <img class="card-thumb-img"
+                   src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?auto=format&fit=crop&w=400&q=80"
+                   alt="Planner and clock"
+                   onerror="this.src=''; this.style.display='none';">
+              <div class="card-visual-text">
+                <h2>Course Waiting List Status</h2>
+                <p>Automated first-in, first-out waitlist for full courses</p>
+              </div>
+            </div>
+
+            <p class="muted">If a course has reached maximum capacity, join its waitlist. You will be automatically enrolled when a seat becomes available!</p>
+            
+            <label for="queue-course-select">Choose a course</label>
+            <select id="queue-course-select">
+              <option value="">Loading courses...</option>
+            </select>
+
+            <div class="queue-actions">
+              <button class="primary" id="join-queue-button" type="button">Join waiting queue</button>
+              <button class="secondary" id="check-queue-button" type="button">Check my position</button>
+              <button class="secondary" id="cancel-queue-button" type="button">Cancel request</button>
+            </div>
+
+            <p id="queue-student-message" class="alert" role="status" hidden></p>
+          </section>
+
+          <!-- FIFO Queue Process Guide Card -->
+          <section class="card">
+            <div class="card-visual-header">
+              <div style="width: 54px; height: 54px; border-radius: var(--radius-md); background: var(--green-soft); color: var(--green-dark); display: grid; place-items: center; font-size: 24px; flex-shrink: 0;">⏱️</div>
+              <div class="card-visual-text">
+                <h2>How Waitlists Work</h2>
+                <p>3-Step Automated Promotion Cycle</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: var(--line-subtle); border-radius: var(--radius-md);">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">1</div>
+                <div>
+                  <strong style="display: block; font-size: 14.5px; color: var(--ink);">Join Full Course Queue</strong>
+                  <span style="font-size: 13px; color: var(--muted);">Your request timestamp assigns your queue position in strict FIFO order.</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: var(--line-subtle); border-radius: var(--radius-md);">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--amber); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">2</div>
+                <div>
+                  <strong style="display: block; font-size: 14.5px; color: var(--ink);">Track Live Priority</strong>
+                  <span style="font-size: 13px; color: var(--muted);">Check your queue rank anytime to see how close you are to the next open seat.</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: var(--line-subtle); border-radius: var(--radius-md);">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">3</div>
+                <div>
+                  <strong style="display: block; font-size: 14.5px; color: var(--ink);">Automatic Auto-Enrollment</strong>
+                  <span style="font-size: 13px; color: var(--muted);">When any student drops, position #1 is promoted instantly with alert notification.</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- TAB 4: Account Security -->
+      <div class="tab-panel" id="tab-security">
+        <div class="grid">
+          <section class="card">
+            <div class="card-visual-header">
+              <img class="card-thumb-img"
+                   src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400&q=80"
+                   alt="Account security"
+                   onerror="this.src=''; this.style.display='none';">
+              <div class="card-visual-text">
+                <h2>Change Username</h2>
+                <p>Update your login handle</p>
+              </div>
+            </div>
+
+            <form id="username-form">
+              <label for="current-password-username">Current password</label>
+              <input id="current-password-username" type="password" autocomplete="current-password" required>
+
+              <label for="new-username">New username</label>
+              <input id="new-username" type="text" minlength="3" maxlength="40" pattern="[A-Za-z0-9._-]{3,40}" autocomplete="username" required>
+              <p class="muted" style="margin-top: 6px;">Use 3–40 letters, numbers, dots, underscores or hyphens.</p>
+
+              <button class="primary" id="username-button" type="submit">Save username</button>
+            </form>
+            <p id="username-message" class="alert" role="status" hidden></p>
+          </section>
+
+          <section class="card">
+            <div class="card-visual-header">
+              <div style="width: 54px; height: 54px; border-radius: var(--radius-md); background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; font-size: 22px; flex-shrink: 0;">🔑</div>
+              <div class="card-visual-text">
+                <h2>Change Password</h2>
+                <p>Enhance account credentials</p>
+              </div>
+            </div>
+
+            <form id="password-form">
+              <label for="current-password">Current password</label>
+              <input id="current-password" type="password" autocomplete="current-password" required>
+
+              <label for="new-password">New password</label>
+              <input id="new-password" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters" required>
+
+              <label for="confirm-password">Confirm new password</label>
+              <input id="confirm-password" type="password" minlength="8" autocomplete="new-password" placeholder="Re-enter new password" required>
+
+              <button class="primary" id="password-button" type="submit">Save password</button>
+            </form>
+            <p id="password-message" class="alert" role="status" hidden></p>
+          </section>
+        </div>
+      </div>
+
     </section>
-    <footer>CourseHub · Student Course Registration System</footer>
+
+    <footer>
+      CourseHub · Student Course Registration System · Java OOP Group Project
+    </footer>
   </main>
 
   <script>
     "use strict";
     const byId = id => document.getElementById(id);
     let account = null;
+    let availableCourses = [];
+
+    // Tab Navigation
+    document.querySelectorAll(".tab-button").forEach(button => {
+      button.addEventListener("click", () => {
+        const targetTab = button.dataset.tab;
+        document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
+        button.classList.add("active");
+        const panel = byId(targetTab);
+        if (panel) panel.classList.add("active");
+      });
+    });
 
     async function api(url, options = {}) {
       const response = await fetch(url, {
@@ -149,16 +956,34 @@
       return body;
     }
 
-    function showMessage(id, text, success = false) {
+    const messageTimers = {};
+    function showMessage(id, text, success = false, autoHideMs = 6000) {
       const element = byId(id);
+      if (!element) return;
+      if (messageTimers[id]) clearTimeout(messageTimers[id]);
       element.textContent = text;
       element.hidden = false;
+      element.style.opacity = "1";
+      element.style.transition = "opacity 0.4s ease";
       element.classList.toggle("success", success);
+
+      if (autoHideMs > 0) {
+        messageTimers[id] = setTimeout(() => {
+          element.style.opacity = "0";
+          setTimeout(() => {
+            element.hidden = true;
+            element.style.opacity = "1";
+          }, 400);
+        }, autoHideMs);
+      }
     }
 
     function hideMessage(id) {
-      byId(id).hidden = true;
-      byId(id).classList.remove("success");
+      const element = byId(id);
+      if (element) {
+        element.hidden = true;
+        element.classList.remove("success");
+      }
     }
 
     async function loadProfile() {
@@ -175,9 +1000,176 @@
       }
     }
 
+    async function loadAvailableCourses() {
+      try {
+        const courses = await api("/api/courses");
+        availableCourses = courses;
+
+        const select = byId("course-select");
+        select.innerHTML = '<option value="">Choose a course</option>';
+
+        courses.forEach(course => {
+          const option = document.createElement("option");
+          option.value = course.courseCode;
+          option.textContent = `${course.courseCode} - ${course.title}`;
+          select.appendChild(option);
+        });
+
+      } catch (error) {
+        byId("course-select").innerHTML = '<option value="">Could not load courses</option>';
+        showMessage("registration-message", error.message);
+      }
+    }
+
+    async function loadMyRegistrations() {
+      try {
+        const registrations = await api(
+                `/api/registrations/student/${encodeURIComponent(account.studentId)}`
+        );
+
+        const list = byId("registration-list");
+        list.innerHTML = "";
+
+        if (registrations.length === 0) {
+          list.textContent = "You haven't registered for any courses yet.";
+          return;
+        }
+
+        registrations.forEach(registration => {
+          const item = document.createElement("div");
+          item.className = "registration-item";
+
+          const heading = document.createElement("h4");
+          const course = availableCourses.find(
+                  c => c.courseCode === registration.courseCode
+          );
+
+          heading.textContent = course
+                  ? `${registration.courseCode} - ${course.title}`
+                  : registration.courseCode;
+
+          const status = document.createElement("p");
+          status.textContent = `Status: ${registration.status}`;
+          status.className = registration.status === "ACTIVE"
+                  ? "registration-active"
+                  : "registration-cancelled";
+
+          const date = document.createElement("p");
+          let formattedDate = "Not available";
+
+          if (Array.isArray(registration.registrationDateTime)) {
+            const d = registration.registrationDateTime;
+            formattedDate = new Date(
+                    d[0], d[1] - 1, d[2],
+                    d[3], d[4], d[5], Math.floor(d[6] / 1000000)
+            ).toLocaleString();
+          } else if (registration.registrationDateTime) {
+            formattedDate = new Date(
+                    registration.registrationDateTime
+            ).toLocaleString();
+          }
+
+          date.textContent = `Registered: ${formattedDate}`;
+
+          item.appendChild(heading);
+          item.appendChild(status);
+          item.appendChild(date);
+          if (registration.status === "ACTIVE") {
+            const dropButton = document.createElement("button");
+            dropButton.textContent = "Drop Course";
+
+            dropButton.addEventListener("click", async () => {
+              const confirmed = confirm(
+                      "Are you sure you want to drop this course?"
+              );
+
+              if (!confirmed) return;
+
+              try {
+                await api(
+                        `/api/registrations/${encodeURIComponent(registration.registrationId)}`,
+                        { method: "DELETE" }
+                );
+
+                showMessage(
+                        "registration-message",
+                        "Course dropped successfully!",
+                        true,
+                        6000
+                );
+
+                await loadMyRegistrations();
+
+              } catch (error) {
+                showMessage("registration-message", error.message, false, 6000);
+              }
+            });
+
+            item.appendChild(dropButton);
+          }
+
+          list.appendChild(item);
+        });
+
+      } catch (error) {
+        byId("registration-list").textContent = "Could not load your registrations.";
+        showMessage("registration-message", error.message, false, 6000);
+      }
+    }
+
+    window.loadMyRegistrations = loadMyRegistrations;
+
+    async function joinCourse() {
+      const courseCode = byId("course-select").value;
+
+      if (!courseCode) {
+        showMessage("registration-message", "Please select a course.", false, 5000);
+        return;
+      }
+
+      try {
+        await api("/api/registrations", {
+          method: "POST",
+          body: JSON.stringify({ courseCode })
+        });
+
+        showMessage(
+                "registration-message",
+                "Successfully registered for the course!",
+                true,
+                6000
+        );
+
+        await loadMyRegistrations();
+
+      } catch (error) {
+        if (error.message.includes("Course is full")) {
+          try {
+            const entry = await api("/api/queue", {
+              method: "POST",
+              body: JSON.stringify({ courseCode })
+            });
+
+            showMessage(
+                    "registration-message",
+                    `The course is full. You have been added to the waiting list at position ${entry.position}.`,
+                    true,
+                    7000
+            );
+
+          } catch (queueError) {
+            showMessage("registration-message", queueError.message, false, 6000);
+          }
+
+        } else {
+          showMessage("registration-message", error.message, false, 6000);
+        }
+      }
+    }
+
     async function refreshAccount() {
       account = await api("/api/auth/me");
-      byId("signed-in-as").textContent = `Signed in as ${account.username}`;
+      byId("signed-in-as").innerHTML = `<span class="user-avatar-circle">S</span> Signed in as ${account.username}`;
       byId("new-username").value = account.username || "";
       return account;
     }
@@ -189,7 +1181,7 @@
           window.location.replace(account.role === "ADMIN" ? "/students.html" : "/");
           return;
         }
-        byId("signed-in-as").textContent = `Signed in as ${account.username}`;
+        byId("signed-in-as").innerHTML = `<span class="user-avatar-circle">S</span> Signed in as ${account.username}`;
         if (account.mustChangePassword) {
           byId("first-login-card").hidden = false;
           byId("dashboard-content").hidden = true;
@@ -199,6 +1191,8 @@
         byId("dashboard-content").hidden = false;
         byId("new-username").value = account.username || "";
         await loadProfile();
+        await loadAvailableCourses();
+        await loadMyRegistrations();
       } catch (error) {
         if (!error.message.includes("401")) console.error(error);
         window.location.replace("/");
@@ -211,7 +1205,7 @@
       const currentPassword = byId("first-current-password").value;
       const newPassword = byId("first-new-password").value;
       if (newPassword !== byId("first-confirm-password").value) {
-        showMessage("first-message", "The new passwords do not match.");
+        showMessage("first-message", "The new passwords do not match.", false, 6000);
         return;
       }
       const button = byId("first-password-button");
@@ -226,7 +1220,7 @@
           byId("first-password-form").reset();
         }
       } catch (error) {
-        showMessage("first-message", error.message);
+        showMessage("first-message", error.message, false, 6000);
       } finally {
         button.disabled = false;
       }
@@ -245,12 +1239,12 @@
           body: JSON.stringify({ currentPassword, newUsername })
         });
         account = result;
-        byId("signed-in-as").textContent = `Signed in as ${account.username}`;
+        byId("signed-in-as").innerHTML = `<span class="user-avatar-circle">S</span> Signed in as ${account.username}`;
         byId("new-username").value = account.username || newUsername;
         byId("current-password-username").value = "";
-        showMessage("username-message", "Username updated successfully.", true);
+        showMessage("username-message", "Username updated successfully.", true, 6000);
       } catch (error) {
-        showMessage("username-message", error.message);
+        showMessage("username-message", error.message, false, 6000);
       } finally {
         button.disabled = false;
       }
@@ -262,11 +1256,11 @@
       const currentPassword = byId("current-password").value;
       const newPassword = byId("new-password").value;
       if (newPassword !== byId("confirm-password").value) {
-        showMessage("password-message", "The new passwords do not match.");
+        showMessage("password-message", "The new passwords do not match.", false, 6000);
         return;
       }
       if (newPassword === currentPassword) {
-        showMessage("password-message", "Choose a new password different from your current password.");
+        showMessage("password-message", "Choose a new password different from your current password.", false, 6000);
         return;
       }
       const button = byId("password-button");
@@ -277,9 +1271,9 @@
           body: JSON.stringify({ currentPassword, newPassword })
         });
         byId("password-form").reset();
-        showMessage("password-message", "Password updated successfully.", true);
+        showMessage("password-message", "Password updated successfully.", true, 6000);
       } catch (error) {
-        showMessage("password-message", error.message);
+        showMessage("password-message", error.message, false, 6000);
       } finally {
         button.disabled = false;
       }
@@ -290,8 +1284,9 @@
       catch (error) { console.error(error); }
       finally { window.location.replace("/"); }
     });
-
+    byId("join-course-btn").addEventListener("click", joinCourse);
     initialize();
   </script>
+  <script src="/js/student-queue.js" defer></script>
 </body>
 </html>

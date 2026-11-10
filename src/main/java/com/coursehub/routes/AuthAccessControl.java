@@ -68,9 +68,7 @@ public class AuthAccessControl {
         // Admin-only API areas.
         boolean adminOnlyPath =
                 path.equals("/api/admin")
-                        || path.startsWith("/api/admin/")
-                        || path.equals("/api/queue")
-                        || path.startsWith("/api/queue/");
+                        || path.startsWith("/api/admin/");
 
         if (adminOnlyPath && !isAdmin) {
             throw new ForbiddenResponse(

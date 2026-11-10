@@ -1,8 +1,12 @@
 
 package com.coursehub.routes;
-
+import com.coursehub.model.Registration;
+import com.coursehub.model.QueueEntry;
 import com.coursehub.model.Student;
 import com.coursehub.service.StudentService;
+import com.coursehub.repository.AccountRepository;
+import com.coursehub.repository.RegistrationRepository;
+import com.coursehub.repository.QueueRepository;
 import io.javalin.http.Context;
 
 import java.util.Map;
@@ -10,9 +14,20 @@ import java.util.Map;
 public class StudentRoutes {
 
     private final StudentService service;
+    private final AccountRepository accountRepository;
+    private final RegistrationRepository registrationRepository;
+    private final QueueRepository queueRepository;
 
-    public StudentRoutes(StudentService service) {
+    public StudentRoutes(
+            StudentService service,
+            AccountRepository accountRepository,
+            RegistrationRepository registrationRepository,
+            QueueRepository queueRepository
+    ) {
         this.service = service;
+        this.accountRepository = accountRepository;
+        this.registrationRepository = registrationRepository;
+        this.queueRepository = queueRepository;
     }
 
     public void getAll(Context ctx) {
@@ -50,7 +65,45 @@ public class StudentRoutes {
         handle(ctx, () -> {
             String id = ctx.pathParam("studentId");
 
+            // Confirm that the student exists.
+            service.getStudent(id);
+
+            // Check for active registrations.
+            boolean hasActiveRegistration =
+                    registrationRepository.findByStudentId(id)
+                            .stream()
+                            .anyMatch(registration ->
+                                    Registration.ACTIVE.equalsIgnoreCase(
+                                            registration.getStatus()
+                                    )
+                            );
+
+            if (hasActiveRegistration) {
+                throw new IllegalStateException(
+                        "Cannot delete student. The student has active course registrations."
+                );
+            }
+
+            // Check for waiting-list entries.
+            boolean isWaiting =
+                    queueRepository.findByStudentId(id)
+                            .stream()
+                            .anyMatch(entry ->
+                                    QueueEntry.WAITING.equalsIgnoreCase(
+                                            entry.getStatus()
+                                    )
+                            );
+
+            if (isWaiting) {
+                throw new IllegalStateException(
+                        "Cannot delete student. The student is currently in a waiting list."
+                );
+            }
+
+            // Delete student and associated login account.
             service.deleteStudent(id);
+            accountRepository.deleteByStudentId(id);
+
             ctx.status(204);
         });
     }
@@ -65,8 +118,14 @@ public class StudentRoutes {
         } catch (StudentService.DuplicateStudentException e) {
             ctx.status(409).json(Map.of("error", e.getMessage()));
 
-        } catch (IllegalArgumentException e) {
+        }catch (IllegalStateException e) {
+            ctx.status(409).json(Map.of("error", e.getMessage()));
+
+        }catch (IllegalArgumentException e) {
             ctx.status(400).json(Map.of("error", e.getMessage()));
+
         }
+
+
     }
 }

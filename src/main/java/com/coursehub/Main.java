@@ -46,6 +46,13 @@ public class Main {
         AccountRepository accountRepository =
                 new AccountRepository();
 
+        StudentRoutes studentRoutes = new StudentRoutes(
+                studentService,
+                accountRepository,
+                registrationRepository,
+                queueRepository
+        );
+
         AccountService accountService =
                 new AccountService(accountRepository);
 
