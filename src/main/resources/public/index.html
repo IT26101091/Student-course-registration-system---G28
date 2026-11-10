@@ -1,42 +1,401 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CourseHub | Student Course Registration</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="/" aria-label="CourseHub home"><span class="brand-mark">C</span> CourseHub</a>
-    <span class="topbar-label">University course registration</span>
-  </header>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>CourseHub | Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 
-  <main class="hero-wrap">
-    <section class="hero">
-      <p class="eyebrow">STUDENT COURSE REGISTRATION SYSTEM</p>
-      <h1>Your next semester<br><span>starts here.</span></h1>
-      <p class="intro">Explore courses, manage registrations, and keep track of your academic journey in one place.</p>
-      <div class="portal-grid">
-        <article class="portal-card">
-          <div class="card-icon student-icon" aria-hidden="true">↗</div>
-          <h2>Student portal</h2>
-          <p>Browse courses and manage your registrations.</p>
-          <button class="portal-button" type="button" disabled title="Portal will be connected when CRUD modules are implemented">Student portal <span>→</span></button>
-          <small>Module under development</small>
-        </article>
-        <article class="portal-card">
-          <div class="card-icon admin-icon" aria-hidden="true">▤</div>
-          <h2>Admin portal</h2>
-          <p>Manage course records, students, and waiting lists.</p>
-          <button class="portal-button secondary" type="button" disabled title="Portal will be connected when CRUD modules are implemented">Admin portal <span>→</span></button>
-          <small>Module under development</small>
-        </article>
+  <style>
+    :root {
+      color-scheme: light;
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --blue: #4f46e5;
+      --blue-light: #6366f1;
+      --blue-hover: #4338ca;
+      --blue-soft: #eef2ff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --muted-light: #94a3b8;
+      --line: #e2e8f0;
+      --danger: #ef4444;
+      --danger-dark: #b91c1c;
+      --danger-soft: #fef2f2;
+      --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: var(--font-main);
+      background: #0f172a;
+      color: var(--ink);
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient background lighting */
+    .bg-glow-1 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      pointer-events: none;
+      filter: blur(40px);
+    }
+
+    .bg-glow-2 {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
+      bottom: -80px;
+      right: -80px;
+      pointer-events: none;
+      filter: blur(40px);
+    }
+
+    .card {
+      width: 100%;
+      max-width: 460px;
+      padding: 42px 40px;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+      animation: card-appear 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes card-appear {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      background: var(--gradient-primary);
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 800;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    }
+
+    .brand-text {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+    }
+
+    .brand-text span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-pill {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-soft);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .description {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 700;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: #fafbfc;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    input:focus {
+      background: #ffffff;
+      border-color: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+    }
+
+    input::placeholder {
+      color: var(--muted-light);
+    }
+
+    button {
+      width: 100%;
+      padding: 13px 20px;
+      margin-top: 22px;
+      border: none;
+      border-radius: 10px;
+      background: var(--gradient-primary);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin-top: 18px;
+      border-radius: 10px;
+      background: var(--danger-soft);
+      border: 1px solid #fecaca;
+      color: var(--danger-dark);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .help-box {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .help-box p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .help-box a {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      transition: color 0.15s ease;
+    }
+
+    .help-box a:hover {
+      color: var(--blue-hover);
+      text-decoration: underline;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 12px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+<div class="bg-glow-1"></div>
+<div class="bg-glow-2"></div>
+
+<main class="card">
+  <div style="width: 100%; height: 100px; border-radius: 14px; overflow: hidden; margin-bottom: 24px; position: relative; border: 1px solid var(--line);">
+    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80"
+         alt="University Campus"
+         style="width: 100%; height: 100%; object-fit: cover;"
+         onerror="this.parentElement.style.display='none';">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(79,70,229,0.15) 0%, rgba(15,23,42,0.65) 100%); display: flex; align-items: flex-end; padding: 12px 16px;">
+      <span style="color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">🎓 Student & Admin Portal</span>
+    </div>
+  </div>
+
+  <div class="brand-header">
+    <div class="brand-mark">C</div>
+    <div class="brand-text">Course<span>Hub</span></div>
+    <span class="badge-pill">Portal</span>
+  </div>
+
+  <section id="login-panel">
+    <h1>Welcome back</h1>
+    <p class="description">
+      Sign in to manage courses, enrollments, or access your student dashboard.
+    </p>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label for="username">Username or Student ID</label>
+        <div class="input-wrapper">
+          <input
+                  id="username"
+                  name="username"
+                  placeholder="e.g. admin or STU001"
+                  autocomplete="username"
+                  required>
+        </div>
       </div>
-      <div class="server-status"><span id="status-dot" class="status-dot"></span><span id="server-status">Checking connection to Java server…</span></div>
-    </section>
-    <footer>CourseHub · Java OOP Group Project</footer>
-  </main>
-  <script src="/js/app.js"></script>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  autocomplete="current-password"
+                  required>
+        </div>
+      </div>
+
+      <button id="login-button" type="submit">
+        Sign in to CourseHub
+      </button>
+    </form>
+
+    <div class="help-box">
+      <p>First time logging in? Please get your login credentials from the administrator.</p>
+    </div>
+
+  </section>
+
+  <section id="password-panel" hidden>
+    <h1>Secure your account</h1>
+    <p class="description">
+      You are using a temporary password. Please choose a new secure password to proceed.
+    </p>
+
+    <form id="password-form">
+      <div class="form-group">
+        <label for="current-password">Current password</label>
+        <input
+                id="current-password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Temporary password"
+                required>
+      </div>
+
+      <div class="form-group">
+        <label for="new-password">New password</label>
+        <input
+                id="new-password"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="At least 8 characters"
+                required>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password">Confirm new password</label>
+        <input
+                id="confirm-password"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="Re-enter new password"
+                required>
+      </div>
+
+      <button id="password-button" type="submit">
+        Update password & continue
+      </button>
+    </form>
+  </section>
+
+  <p id="message" class="message" role="alert" hidden></p>
+</main>
+
+<script src="/js/app.js" defer></script>
 </body>
 </html>
