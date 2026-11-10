@@ -33,6 +33,8 @@ public class StudentRepository {
                 .findFirst();
     }
 
+
+
     public synchronized void insert(Student student) {
         List<Student> students = store.readAll();
         students.add(student);

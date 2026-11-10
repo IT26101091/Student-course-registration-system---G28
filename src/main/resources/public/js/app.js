@@ -24,6 +24,7 @@ function showPasswordChange() {
   clearMessage();
 }
 
+
 function openDashboard(account) {
   if (account.mustChangePassword) {
     showPasswordChange();

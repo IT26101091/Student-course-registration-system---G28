@@ -34,6 +34,7 @@ public class AdminAccountRoutes {
             return;
         }
 
+
         if (request.getTemporaryPassword() == null
                 || request.getTemporaryPassword().isBlank()) {
 

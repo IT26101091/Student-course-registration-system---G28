@@ -28,6 +28,7 @@ public class AccountService {
                     "Admin username is required.");
         }
 
+
         String normalizedUsername = username.trim();
 
         if (accountRepository.usernameExists(normalizedUsername)) {

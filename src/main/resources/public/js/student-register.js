@@ -23,6 +23,7 @@
       try { body = JSON.parse(text); } catch { body = text; }
     }
 
+
     if (!response.ok) {
       const message = body && typeof body === "object" && body.error
         ? body.error
