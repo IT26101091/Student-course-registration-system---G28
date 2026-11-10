@@ -297,20 +297,20 @@
 
 <script src="/js/courses.js" defer></script>
 <script>
-  function setupAdminLogout() {
-    const handleLogout = async () => {
-      try {
-        await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
-      } catch (e) {
-        console.error(e);
-      } finally {
-        window.location.replace("/");
-      }
-    };
-    document.getElementById("admin-logout-btn")?.addEventListener("click", handleLogout);
-    document.getElementById("sidebar-logout-btn")?.addEventListener("click", handleLogout);
-  }
-  setupAdminLogout();
+    function setupAdminLogout() {
+        const handleLogout = async () => {
+            try {
+                await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+            } catch (e) {
+                console.error(e);
+            } finally {
+                window.location.replace("/");
+            }
+        };
+        document.getElementById("admin-logout-btn")?.addEventListener("click", handleLogout);
+        document.getElementById("sidebar-logout-btn")?.addEventListener("click", handleLogout);
+    }
+    setupAdminLogout();
 </script>
 
 </body>
