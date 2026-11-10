@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
+  <title>Student Management | CourseHub</title>
+  <link rel="stylesheet" href="/css/students.css">
+</head>
+<body>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="CourseHub home">
+      <span class="brand-mark">C</span>
+      <span>CourseHub</span>
+    </a>
+
+    <p class="nav-label">WORKSPACE</p>
+    <nav class="side-nav" aria-label="Admin navigation">
+      <a class="nav-item" href="/">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>Home</span>
+      </a>
+      <a class="nav-item active" href="/students.html" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">♙</span>
+        <span>Students</span>
+      </a>
+      <a class="nav-item" href="/courses.html">
+        <span class="nav-icon" aria-hidden="true">▤</span>
+        <span>Courses</span>
+      </a>
+      <a class="nav-item" href="/registrations.html">
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>Registrations</span>
+      </a>
+      <a class="nav-item" href="/queue.html">
+        <span class="nav-icon" aria-hidden="true">◷</span>
+        <span>Waiting queue</span>
+      </a>
+    </nav>
+
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-item" href="/">
+          <span class="nav-icon" aria-hidden="true">⌂</span>
+          <span>Home</span>
+        </a>
+        <a class="nav-item active" href="/students.html" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">♙</span>
+          <span>Students</span>
+        </a>
+        <a class="nav-item" href="/courses.html">
+          <span class="nav-icon" aria-hidden="true">▤</span>
+          <span>Courses</span>
+        </a>
+        <span class="nav-item disabled" title="Registration module is not connected yet">
+          <span class="nav-icon" aria-hidden="true">▣</span>
+          <span>Registrations</span>
+          <span class="coming-soon">Soon</span>
+        </span>
+        <span class="nav-item disabled" title="Queue module is not connected yet">
+          <span class="nav-icon" aria-hidden="true">◷</span>
+          <span>Waiting queue</span>
+          <span class="coming-soon">Soon</span>
+        </span>
+        <div class="avatar" title="Administrator">A</div>
+        <button class="admin-logout-btn" id="admin-logout-btn" type="button" title="Sign out of Admin Portal">
+          <span class="admin-logout-icon" aria-hidden="true">↪</span>
+          <span>Sign out</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow">ADMINISTRATION</p>
+        <h1>Student management</h1>
+        <p class="page-description">Create, view, update and manage student enrollment records and credentials.</p>
+      </div>
+      <button class="button button-primary" id="add-student-button" type="button">
+        <span class="button-plus" aria-hidden="true">＋</span> Add student
+      </button>
+    </section>
+
+    <!-- Statistics Grid -->
+    <section class="stats-grid" aria-label="Student statistics">
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon blue">♙</span>
+          <span class="stat-tag">All records</span>
+        </div>
+        <p class="stat-label">Total students</p>
+        <p class="stat-value" id="total-students">—</p>
+        <p class="stat-note">Registered students in system</p>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon green">▦</span>
+          <span class="stat-tag">Programmes</span>
+        </div>
+        <p class="stat-label">Degree programmes</p>
+        <p class="stat-value" id="degree-count">—</p>
+        <p class="stat-note">Academic programmes represented</p>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon violet">⌕</span>
+          <span class="stat-tag">Live view</span>
+        </div>
+        <p class="stat-label">Displayed results</p>
+        <p class="stat-value" id="displayed-count">—</p>
+        <p class="stat-note">Students matching current search</p>
+      </article>
+    </section>
+
+    <!-- Student Table Card -->
+    <section class="table-card">
+      <div class="table-card-heading">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=120&q=80"
+               alt="Student directory"
+               style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line);"
+               onerror="this.style.display='none';">
+          <div>
+            <h2>Student Directory</h2>
+            <p>Browse students, degree specializations, and manage account credentials.</p>
+          </div>
+        </div>
+        <label class="search-box" for="student-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="student-search" type="search" placeholder="Search students…" autocomplete="off">
+          <kbd>⌘ K</kbd>
+        </label>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+          <tr>
+            <th scope="col">STUDENT</th>
+            <th scope="col">STUDENT ID</th>
+            <th scope="col">DEGREE PROGRAMME</th>
+            <th scope="col">EMAIL ADDRESS</th>
+            <th scope="col" class="actions-heading">ACTIONS</th>
+          </tr>
+          </thead>
+          <tbody id="students-table-body">
+          <tr><td colspan="5" class="table-message">Loading student records…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer">
+        <span id="table-summary">Loading records…</span>
+        <button class="button button-subtle" id="refresh-button" type="button">
+          <span aria-hidden="true">↻</span> Refresh
+        </button>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>CourseHub · Student Course Registration System</span>
+      <span>Java OOP Group Project</span>
+    </footer>
+  </main>
+</div>
+
+<!-- Add/Edit Student Dialog -->
+<dialog class="student-dialog" id="student-dialog" aria-labelledby="dialog-title">
+  <form id="student-form" novalidate>
+    <div class="dialog-heading">
+      <div>
+        <p class="eyebrow" id="dialog-eyebrow">STUDENT RECORD</p>
+        <h2 id="dialog-title">Add a student</h2>
+        <p id="dialog-description">Enter the student's personal and academic details.</p>
+      </div>
+      <button class="icon-button" id="close-dialog-button" type="button" aria-label="Close dialog">×</button>
+    </div>
+
+    <div class="form-grid">
+      <label class="form-field" for="student-id">
+        <span>Student ID <span class="required">*</span></span>
+        <input id="student-id" name="studentId" type="text" placeholder="e.g. STU001" required maxlength="40" autocomplete="off">
+        <small id="student-id-help">Use a unique identifier for each student.</small>
+      </label>
+      <label class="form-field" for="student-name">
+        <span>Full name <span class="required">*</span></span>
+        <input id="student-name" name="name" type="text" placeholder="e.g. Kasun Fernando" required maxlength="100" autocomplete="name">
+      </label>
+      <label class="form-field full-width" for="student-email">
+        <span>Email address <span class="required">*</span></span>
+        <input id="student-email" name="email" type="email" placeholder="student@university.edu" required maxlength="160" autocomplete="email">
+      </label>
+      <label class="form-field full-width" for="degree-program">
+        <span>Degree programme <span class="required">*</span></span>
+        <input id="degree-program" name="degreeProgram" type="text" placeholder="e.g. B.Sc. in Software Engineering" required maxlength="120">
+      </label>
+    </div>
+
+    <p class="form-error" id="form-error" role="alert" hidden></p>
+    <div class="dialog-actions">
+      <button class="button button-subtle" id="cancel-dialog-button" type="button">Cancel</button>
+      <button class="button button-primary" id="save-student-button" type="submit">Save student</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Create Account Dialog -->
+<dialog class="student-dialog" id="account-dialog" aria-labelledby="account-dialog-title">
+  <form id="account-form" novalidate>
+    <div class="dialog-heading">
+      <div>
+        <p class="eyebrow">AUTHENTICATION</p>
+        <h2 id="account-dialog-title">Create student account</h2>
+        <p>The student ID will serve as their initial login username.</p>
+      </div>
+
+      <button class="icon-button" id="close-account-dialog" type="button" aria-label="Close dialog">×</button>
+    </div>
+
+    <div class="form-grid">
+      <label class="form-field" for="account-student-id">
+        <span>Student ID</span>
+        <input id="account-student-id" readonly required>
+      </label>
+
+      <label class="form-field full-width" for="temporary-password">
+        <span>Temporary password <span class="required">*</span></span>
+        <input id="temporary-password"
+               type="password"
+               minlength="8"
+               autocomplete="new-password"
+               placeholder="At least 8 characters"
+               required>
+        <small>The student will be prompted to change this password on first login.</small>
+      </label>
+    </div>
+
+    <p class="form-error" id="account-form-error" role="alert" hidden></p>
+
+    <div class="dialog-actions">
+      <button class="button button-subtle" id="cancel-account-dialog" type="button">
+        Cancel
+      </button>
+
+      <button class="button button-primary" id="create-account-button" type="submit">
+        Create account
+      </button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/js/students.js" defer></script>
+<script>
+  function setupAdminLogout() {
+    const handleLogout = async () => {
+      try {
+        await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        window.location.replace("/");
+      }
+    };
+    document.getElementById("admin-logout-btn")?.addEventListener("click", handleLogout);
+    document.getElementById("sidebar-logout-btn")?.addEventListener("click", handleLogout);
+  }
+  setupAdminLogout();
+</script>
+</body>
+</html>

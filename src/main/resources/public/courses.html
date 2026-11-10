@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0f172a">
+
+    <title>Course Management | CourseHub</title>
+
+    <link rel="stylesheet" href="/css/students.css">
+</head>
+
+<body>
+<div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <a class="brand" href="/" aria-label="CourseHub home">
+            <span class="brand-mark">C</span>
+            <span>CourseHub</span>
+        </a>
+
+        <p class="nav-label">WORKSPACE</p>
+
+        <nav class="side-nav" aria-label="Admin Navigation">
+            <a class="nav-item" href="/">
+                <span class="nav-icon" aria-hidden="true">⌂</span>
+                <span>Home</span>
+            </a>
+
+            <a class="nav-item" href="/students.html">
+                <span class="nav-icon" aria-hidden="true">♙</span>
+                <span>Students</span>
+            </a>
+
+            <a class="nav-item active" href="/courses.html" aria-current="page">
+                <span class="nav-icon" aria-hidden="true">▤</span>
+                <span>Courses</span>
+            </a>
+
+            <a class="nav-item" href="/registrations.html">
+                <span class="nav-icon" aria-hidden="true">▣</span>
+                <span>Registrations</span>
+            </a>
+
+            <a class="nav-item" href="/queue.html">
+                <span class="nav-icon" aria-hidden="true">◷</span>
+                <span>Waiting queue</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="team-mark">CH</div>
+            <div class="team-copy">
+                <strong>CourseHub Admin</strong>
+                <span>University Workspace</span>
+            </div>
+            <button class="sidebar-logout-btn" id="sidebar-logout-btn" type="button" title="Sign out">
+                <span aria-hidden="true">↪</span>
+            </button>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="breadcrumbs">
+                <a href="/">Home</a>
+                <span>/</span>
+                <span>Courses</span>
+            </div>
+
+            <div class="topbar-right">
+                <span class="connection-pill">
+                    <span class="connection-dot"></span>
+                    Java server active
+                </span>
+                <div class="avatar" title="Administrator">A</div>
+                <button class="admin-logout-btn" id="admin-logout-btn" type="button" title="Sign out of Admin Portal">
+                    <span class="admin-logout-icon" aria-hidden="true">↪</span>
+                    <span>Sign out</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Heading -->
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">ADMINISTRATION</p>
+                <h1>Course management</h1>
+                <p class="page-description">
+                    Create, view, update and manage university courses and capacity.
+                </p>
+            </div>
+
+            <button class="button button-primary"
+                    id="add-course-button"
+                    type="button">
+                <span class="button-plus" aria-hidden="true">＋</span> Add course
+            </button>
+        </section>
+
+        <!-- Statistics Grid -->
+        <section class="stats-grid" aria-label="Course statistics">
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon blue">▤</span>
+                    <span class="stat-tag">All records</span>
+                </div>
+                <p class="stat-label">Total courses</p>
+                <p class="stat-value" id="total-courses">—</p>
+                <p class="stat-note">Courses active in curriculum</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon green">◈</span>
+                    <span class="stat-tag">Credits</span>
+                </div>
+                <p class="stat-label">Total credits</p>
+                <p class="stat-value" id="total-credits">—</p>
+                <p class="stat-note">Credit hours across all courses</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon violet">⌕</span>
+                    <span class="stat-tag">Live view</span>
+                </div>
+                <p class="stat-label">Displayed courses</p>
+                <p class="stat-value" id="displayed-count">—</p>
+                <p class="stat-note">Courses matching current search</p>
+            </article>
+
+        </section>
+
+        <!-- Course Table Card -->
+        <section class="table-card">
+
+            <div class="table-card-heading">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=120&q=80"
+                         alt="Course curriculum"
+                         style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover; border: 1px solid var(--line);"
+                         onerror="this.style.display='none';">
+                    <div>
+                        <h2>Curriculum Directory</h2>
+                        <p>Manage course details, credit weights, and enrollment capacity.</p>
+                    </div>
+                </div>
+
+                <label class="search-box" for="course-search">
+                    <span aria-hidden="true">⌕</span>
+                    <input id="course-search"
+                           type="search"
+                           placeholder="Search courses…"
+                           autocomplete="off">
+                    <kbd>⌘ K</kbd>
+                </label>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">COURSE CODE</th>
+                        <th scope="col">COURSE TITLE</th>
+                        <th scope="col">CREDITS</th>
+                        <th scope="col">CAPACITY</th>
+                        <th scope="col" class="actions-heading">ACTIONS</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="courses-table-body">
+                    <tr>
+                        <td colspan="5" class="table-message">
+                            Loading courses…
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <span id="table-summary">Loading courses…</span>
+
+                <button class="button button-subtle"
+                        id="refresh-button"
+                        type="button">
+                    <span aria-hidden="true">↻</span> Refresh
+                </button>
+            </div>
+
+        </section>
+
+        <footer class="page-footer">
+            <span>CourseHub · Student Course Registration System</span>
+            <span>Java OOP Group Project</span>
+        </footer>
+
+    </main>
+</div>
+
+<!-- Add/Edit Course Dialog -->
+<dialog class="student-dialog" id="course-dialog" aria-labelledby="dialog-title">
+
+    <form id="course-form" novalidate>
+
+        <div class="dialog-heading">
+            <div>
+                <p class="eyebrow">COURSE RECORD</p>
+                <h2 id="dialog-title">Add a course</h2>
+                <p>Enter the course information below.</p>
+            </div>
+
+            <button class="icon-button"
+                    id="close-dialog-button"
+                    type="button"
+                    aria-label="Close dialog">
+                ×
+            </button>
+        </div>
+
+        <div class="form-grid">
+
+            <label class="form-field" for="course-code">
+                <span>Course code <span class="required">*</span></span>
+                <input id="course-code"
+                       type="text"
+                       placeholder="e.g. CS101"
+                       required
+                       maxlength="30"
+                       autocomplete="off">
+            </label>
+
+            <label class="form-field" for="course-title">
+                <span>Course title <span class="required">*</span></span>
+                <input id="course-title"
+                       type="text"
+                       placeholder="e.g. Data Structures & Algorithms"
+                       required
+                       maxlength="120"
+                       autocomplete="off">
+            </label>
+
+            <label class="form-field full-width" for="course-description">
+                <span>Description</span>
+                <textarea id="course-description"
+                          rows="3"
+                          placeholder="Provide a brief syllabus summary or prerequisites…"></textarea>
+            </label>
+
+            <label class="form-field" for="course-credits">
+                <span>Credits <span class="required">*</span></span>
+                <input id="course-credits"
+                       type="number"
+                       min="1"
+                       required
+                       placeholder="e.g. 3">
+            </label>
+
+            <label class="form-field" for="course-capacity">
+                <span>Maximum capacity <span class="required">*</span></span>
+                <input id="course-capacity"
+                       type="number"
+                       min="1"
+                       required
+                       placeholder="e.g. 35">
+            </label>
+
+        </div>
+
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+
+        <div class="dialog-actions">
+            <button class="button button-subtle"
+                    id="cancel-dialog-button"
+                    type="button">
+                Cancel
+            </button>
+
+            <button class="button button-primary"
+                    id="save-course-button"
+                    type="submit">
+                Save course
+            </button>
+        </div>
+
+    </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/js/courses.js" defer></script>
+<script>
+    function setupAdminLogout() {
+        const handleLogout = async () => {
+            try {
+                await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+            } catch (e) {
+                console.error(e);
+            } finally {
+                window.location.replace("/");
+            }
+        };
+        document.getElementById("admin-logout-btn")?.addEventListener("click", handleLogout);
+        document.getElementById("sidebar-logout-btn")?.addEventListener("click", handleLogout);
+    }
+    setupAdminLogout();
+</script>
+
+</body>
+</html>

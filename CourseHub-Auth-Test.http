@@ -1,0 +1,134 @@
+### CourseHub authentication route tests
+### Start the Javalin server on port 7070 before running these requests.
+### IntelliJ HTTP Client keeps session cookies between requests in this file.
+
+@baseUrl = http://localhost:7070
+
+# Replace these values after an Admin/student account has been created.
+@username = admin
+@password = Hollow1274
+@newPassword = Hollow_1274
+@newUsername = admin-new
+
+### 1. Check current account before login (should return 401)
+GET {{baseUrl}}/api/auth/me
+Accept: application/json
+
+> {%
+    client.test("Request without login returns 401", function () {
+        client.assert(response.status === 401, "Expected HTTP 401 before login");
+    });
+%}
+
+### 2. Log in (requires a real existing account; should return 200)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {%
+    client.test("Login succeeds", function () {
+        client.assert(response.status === 200, "Expected HTTP 200; check username/password and that the account exists");
+        client.assert(response.body.accountId !== undefined, "Expected accountId in response");
+        client.assert(response.body.passwordHash === undefined, "Password hash must not be returned");
+    });
+%}
+
+### 3. Check the logged-in account (should return 200 after successful login)
+GET {{baseUrl}}/api/auth/me
+Accept: application/json
+
+> {%
+    client.test("Current account is returned", function () {
+        client.assert(response.status === 200, "Expected HTTP 200 after login");
+        client.assert(response.body.username !== undefined, "Expected username in response");
+        client.assert(response.body.role !== undefined, "Expected role in response");
+        client.assert(response.body.passwordHash === undefined, "Password hash must not be returned");
+    });
+%}
+
+### 4. Change username (OPTIONAL: this permanently changes the account username)
+### First update @newUsername above to a unique username.
+POST {{baseUrl}}/api/auth/change-username
+Content-Type: application/json
+Accept: application/json
+
+{
+  "currentPassword": "{{password}}",
+  "newUsername": "{{newUsername}}"
+}
+
+### 5. Change password (OPTIONAL: this permanently changes the account password)
+### Run only if you are ready to replace the current password. Update @password above as needed for later logins.
+POST {{baseUrl}}/api/auth/change-password
+Content-Type: application/json
+Accept: application/json
+
+{
+  "currentPassword": "{{password}}",
+  "newPassword": "{{newPassword}}"
+}
+
+### 6. Log out (should return 204)
+POST {{baseUrl}}/api/auth/logout
+
+> {%
+    client.test("Logout succeeds", function () {
+        client.assert(response.status === 204, "Expected HTTP 204 after logout");
+    });
+%}
+
+### 7. Confirm logout worked (should return 401)
+GET {{baseUrl}}/api/auth/me
+Accept: application/json
+
+> {%
+    client.test("Logged-out session is rejected", function () {
+        client.assert(response.status === 401, "Expected HTTP 401 after logout");
+    });
+%}
+
+###8 View existing student records
+GET http://localhost:7070/api/students
+Accept: application/json
+
+### Create a student login account
+POST http://localhost:7070/api/admin/accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "studentId": "STU001",
+  "temporaryPassword": "StudentTemp2026!"
+}
+
+### Change student password
+POST {{baseUrl}}/api/auth/change-password
+Content-Type: application/json
+
+{
+  "currentPassword": "StudentTemp2026!",
+  "newPassword": "Hollow1274"
+}
+
+### Test: Student cannot create Admin accounts
+POST http://localhost:7070/api/admin/accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "studentId": "TEST-ID",
+  "temporaryPassword": "TemporaryTest123!"
+}
+
+### Test: Student cannot view the full student list
+GET http://localhost:7070/api/students
+Accept: application/json
+
+### Student views their own record
+GET http://localhost:7070/api/students/STU001
+Accept: application/json

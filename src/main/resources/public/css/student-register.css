@@ -1,0 +1,511 @@
+/* ═══════════════════════════════════════════════════════════
+   CourseHub — Student Register & Dashboard Shared Styles
+   ═══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+
+:root {
+  color-scheme: light;
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ink: #0f172a;
+  --ink-secondary: #334155;
+  --muted: #64748b;
+  --muted-light: #94a3b8;
+  --line: #e2e8f0;
+  --blue: #4f46e5;
+  --blue-light: #6366f1;
+  --blue-hover: #4338ca;
+  --blue-soft: #eef2ff;
+  --blue-border: #c7d2fe;
+  --green: #10b981;
+  --green-dark: #047857;
+  --green-soft: #ecfdf5;
+  --green-border: #a7f3d0;
+  --danger: #ef4444;
+  --danger-dark: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+  --surface: #ffffff;
+  --page: #f8fafc;
+  --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-green: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.08);
+  --shadow-xl: 0 20px 35px -10px rgb(79 70 229 / 0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-full: 9999px;
+  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.registration-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.08) 0, transparent 35%),
+              radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.06) 0, transparent 35%),
+              var(--page);
+}
+
+.top-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.top-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.top-links a:hover {
+  color: var(--blue);
+}
+
+.registration-wrap {
+  width: min(100% - 40px, 920px);
+  margin: 0 auto;
+  padding: 48px 0 40px;
+}
+
+.registration-intro {
+  max-width: 680px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.registration-intro .eyebrow {
+  margin-bottom: 12px;
+}
+
+.registration-intro h1 {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.registration-intro h1 span {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.intro-text {
+  max-width: 600px;
+  margin: 16px auto 22px;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.info-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  border: 1px solid var(--blue-border);
+  border-radius: var(--radius-md);
+  color: var(--blue-hover);
+  background: var(--blue-soft);
+  text-align: left;
+}
+
+.info-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #ffffff;
+  background: var(--blue);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.info-note p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-secondary);
+}
+
+/* ── Registration Form Card ───────────────────────────────── */
+
+.registration-card {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  box-shadow: var(--shadow-lg);
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.profile-symbol {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  background: var(--gradient-primary);
+  font-size: 20px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
+
+.card-heading h2 {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.card-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.registration-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 18px;
+}
+
+.register-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.register-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.register-field span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.register-field input {
+  min-height: 44px;
+  width: 100%;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  background: #ffffff;
+  outline: none;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.register-field input:focus {
+  border-color: var(--blue-light);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.register-field input::placeholder {
+  color: var(--muted-light);
+}
+
+.register-field small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+
+.required {
+  color: var(--danger);
+}
+
+.registration-actions,
+.success-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.text-link {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.text-link:hover {
+  color: var(--blue);
+}
+
+.submit-button,
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  transition: var(--transition);
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+}
+
+.submit-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.secondary-button {
+  border-color: var(--line);
+  color: var(--ink-secondary);
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.secondary-button:hover {
+  background: var(--page);
+  border-color: #cbd5e1;
+  color: var(--ink);
+}
+
+.notice {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.error-notice {
+  border: 1px solid var(--danger-border);
+  color: var(--danger-dark);
+  background: var(--danger-soft);
+}
+
+.success-panel {
+  display: flex;
+  gap: 16px;
+  margin-top: 22px;
+  padding: 20px;
+  border: 1px solid var(--green-border);
+  border-radius: var(--radius-lg);
+  background: var(--green-soft);
+}
+
+.success-symbol {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #ffffff;
+  background: var(--green);
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+
+.success-panel h3 {
+  margin: 0 0 4px;
+  color: var(--green-dark);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.success-panel p {
+  margin: 0;
+  color: #065f46;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.success-panel .success-help {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.registration-footer {
+  margin-top: 36px;
+  color: var(--muted-light);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  .registration-wrap {
+    padding-top: 30px;
+  }
+  .registration-grid {
+    grid-template-columns: 1fr;
+  }
+  .registration-actions,
+  .success-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .submit-button,
+  .secondary-button {
+    width: 100%;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Course Registration Section (Student Dashboard)
+   ═══════════════════════════════════════════════════════════ */
+
+.registration-section {
+  margin-top: 14px;
+}
+
+.registration-section h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+#course-select {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  background: #ffffff;
+  color: var(--ink);
+  outline: none;
+  transition: var(--transition);
+}
+
+#course-select:focus {
+  border-color: var(--blue-light);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+#join-course-btn {
+  margin-bottom: 20px;
+}
+
+#registration-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.registration-item {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #fafbfc;
+  transition: var(--transition);
+}
+
+.registration-item:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-sm);
+}
+
+.registration-item h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.registration-item p {
+  margin: 4px 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.registration-item button {
+  margin-top: 10px;
+  padding: 7px 14px;
+  background: var(--danger-soft);
+  color: var(--danger-dark);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.registration-item button:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #991b1b;
+}
+
+/* Registration Status Badges */
+
+.registration-active {
+  color: var(--green-dark);
+  font-weight: 700;
+  background: var(--green-soft);
+  border: 1px solid var(--green-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.registration-cancelled {
+  color: var(--danger-dark);
+  font-weight: 700;
+  background: var(--danger-soft);
+  border: 1px solid var(--danger-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
